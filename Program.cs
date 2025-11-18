@@ -207,6 +207,7 @@ try
     // Map Enterprise endpoints
     app.MapPlanningEndpoints();
     app.MapAdminEndpoints();
+    app.MapSparePartsApi();
 
     app.Run();
 }

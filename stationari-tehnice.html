@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staționări Tehnice - MES Enterprise</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .stationari-container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-section h1 {
+            margin: 0 0 10px 0;
+            font-size: 2em;
+        }
+
+        .header-section p {
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .btn-start-intervention {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-weight: 600;
+        }
+
+        .btn-start-intervention:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn-view-history {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-view-history:hover {
+            background: #2563eb;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 0.95em;
+        }
+
+        .form-group label.required::after {
+            content: " *";
+            color: #ef4444;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            padding-top: 20px;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .btn-save {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-save:hover {
+            background: #059669;
+        }
+
+        .btn-cancel {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-cancel:hover {
+            background: #4b5563;
+        }
+
+        .history-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .history-container.active {
+            display: block;
+        }
+
+        .filter-section {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .history-table th {
+            background: #f3f4f6;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .history-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .history-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-deschis {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-inlucru {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-inchis {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .info-box p {
+            margin: 0;
+            color: #1e40af;
+        }
+
+        .timer-display {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #991b1b;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stationari-container">
+        <div class="header-section">
+            <h1>🔧 Staționări Tehnice</h1>
+            <p>Gestionare intervenții tehnice și downtime pentru întreținere echipamente</p>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-start-intervention" onclick="startNewIntervention()">
+                ▶️ Start Intervenție Nouă
+            </button>
+            <button class="btn-view-history" onclick="toggleHistory()">
+                📊 Istoric Staționări
+            </button>
+        </div>
+
+        <!-- Form pentru staționare tehnică -->
+        <div class="form-container" id="interventionForm">
+            <div id="timerDisplay" class="timer-display" style="display: none;">
+                ⏱️ Intervenție în curs: <span id="elapsedTime">00:00:00</span>
+            </div>
+
+            <div class="info-box">
+                <p>📝 Completați toate câmpurile marcate cu * pentru a înregistra staționarea tehnică.</p>
+            </div>
+
+            <form id="technicalDowntimeForm">
+                <div class="form-grid">
+                    <!-- Coloana 1 -->
+                    <div class="form-group">
+                        <label for="dataOra" class="required">Data și Ora</label>
+                        <input type="datetime-local" id="dataOra" name="dataOra" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="linie" class="required">Linie Producție</label>
+                        <select id="linie" name="linie" required onchange="loadEquipments()">
+                            <option value="">Selectați linia...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="echipament" class="required">Stație / Echipament</label>
+                        <select id="echipament" name="echipament" required>
+                            <option value="">Selectați echipamentul...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="produs">Produs</label>
+                        <select id="produs" name="produs">
+                            <option value="">Selectați produsul...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="schimb">Schimb</label>
+                        <select id="schimb" name="schimb">
+                            <option value="">Selectați schimbul...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="operator" class="required">Nume Operator</label>
+                        <input type="text" id="operator" name="operator" required>
+                    </div>
+
+                    <!-- Coloana 2 -->
+                    <div class="form-group">
+                        <label for="problema" class="required">Problemă Raportată</label>
+                        <select id="problema" name="problema" required>
+                            <option value="">Selectați problema...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="defectiune">Defecțiune Identificată</label>
+                        <select id="defectiune" name="defectiune">
+                            <option value="">Selectați defecțiunea...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dataStart">Data Start Intervenție</label>
+                        <input type="datetime-local" id="dataStart" name="dataStart">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dataStop">Data Stop Intervenție</label>
+                        <input type="datetime-local" id="dataStop" name="dataStop">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="durata">Durată Intervenție (minute)</label>
+                        <input type="number" id="durata" name="durata" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Influențează Produsul?</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="influenteazaProdusul" name="influenteazaProdusul">
+                            <label for="influenteazaProdusul">Da, influențează calitatea produsului</label>
+                        </div>
+                    </div>
+
+                    <!-- Full width fields -->
+                    <div class="form-group full-width">
+                        <label for="descriereProblema">Descriere Problemă</label>
+                        <textarea id="descriereProblema" name="descriereProblema" 
+                                  placeholder="Descrieți problema întâmpinată..."></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="cauzaProbabila">Cauza Probabilă</label>
+                        <textarea id="cauzaProbabila" name="cauzaProbabila" 
+                                  placeholder="Care este cauza probabilă a problemei?"></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="actiuniLuate">Acțiuni Luate / Soluții</label>
+                        <textarea id="actiuniLuate" name="actiuniLuate" 
+                                  placeholder="Descrieți acțiunile corective întreprinse..."></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="actiuniPreventive">Acțiuni Preventive</label>
+                        <textarea id="actiuniPreventive" name="actiuniPreventive" 
+                                  placeholder="Ce acțiuni preventive recomandați pentru viitor?"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="cancelForm()">Anulează</button>
+                    <button type="submit" class="btn-save">💾 Salvează și Continuă</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Istoric staționări -->
+        <div class="history-container" id="historyContainer">
+            <h2>📊 Istoric Staționări Tehnice</h2>
+
+            <div class="filter-section">
+                <h3>Filtre</h3>
+                <div class="filter-grid">
+                    <div class="form-group">
+                        <label for="filterLinie">Linie</label>
+                        <select id="filterLinie">
+                            <option value="">Toate liniile</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filterStatus">Status</label>
+                        <select id="filterStatus">
+                            <option value="">Toate statusurile</option>
+                            <option value="Deschis">Deschis</option>
+                            <option value="InLucru">În Lucru</option>
+                            <option value="Inchis">Închis</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filterDataStart">De la data</label>
+                        <input type="date" id="filterDataStart">
+                    </div>
+                    <div class="form-group">
+                        <label for="filterDataEnd">Până la data</label>
+                        <input type="date" id="filterDataEnd">
+                    </div>
+                </div>
+                <button onclick="applyFilters()" class="btn-save" style="margin-top: 15px;">
+                    🔍 Aplică Filtre
+                </button>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Linie</th>
+                            <th>Echipament</th>
+                            <th>Problemă</th>
+                            <th>Operator</th>
+                            <th>Durată (min)</th>
+                            <th>Status</th>
+                            <th>Acțiuni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/stationari-tehnice.js"></script>
+</body>
+</html>

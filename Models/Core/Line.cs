@@ -23,5 +23,15 @@ namespace MesEnterprise.Models.Core
         public bool HasLiveScanning { get; set; }
 
         public decimal CostOperarePeOra { get; set; }
+
+        /// <summary>
+        /// Target timp changeover în minute pentru această linie
+        /// </summary>
+        public int? ChangeoverTargetMinutes { get; set; }
+
+        /// <summary>
+        /// Target OEE (%) pentru această linie
+        /// </summary>
+        public decimal? TargetOEEPercent { get; set; }
     }
 }
