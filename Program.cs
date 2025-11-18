@@ -208,6 +208,8 @@ try
     app.MapPlanningEndpoints();
     app.MapAdminEndpoints();
     app.MapSparePartsApi();
+    app.MapTPMApi();
+    app.MapExcelExportApi();
 
     app.Run();
 }

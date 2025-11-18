@@ -27,12 +27,6 @@ namespace MesEnterprise.Endpoints
         var username = user.FindFirst(ClaimTypes.Name)?.Value;
         if (username == null) return Results.Unauthorized();
 
-        // MODIFICARE: Verificarea sesiunii a fost eliminată
-        // if (UserSessionManager.UserSessions.TryGetValue(username, out var session) && session.LineId != req.LineId)
-        // {
-        //     return Results.Conflict(new { Message = "Acționați pe o linie diferită de cea din sesiune." });
-        // }
-
         var log = new ChangeoverLog
         {
             LineId = req.LineId,
@@ -53,7 +47,41 @@ namespace MesEnterprise.Endpoints
         }
 
         await db.SaveChangesAsync();
-        return Results.Created($"/api/changeover/{log.Id}", new { Message = "Changeover început!" });
+        return Results.Created($"/api/changeover/{log.Id}", new { Message = "Changeover început!", ChangeoverId = log.Id });
+    });
+
+    // POST /api/changeover/complete
+    changeoverApi.MapPost("/complete", async ([FromBody] CompleteChangeoverRequest req, MesDbContext db) =>
+    {
+        var log = await db.ChangeoverLogs
+            .Include(cl => cl.Line)
+            .FirstOrDefaultAsync(cl => cl.Id == req.ChangeoverId);
+        
+        if (log == null)
+            return Results.NotFound(new { Message = "Changeover not found" });
+
+        log.EndTime = DateTime.UtcNow;
+        var durationMinutes = (int)(log.EndTime.Value - log.StartTime).TotalMinutes;
+
+        // Check if exceeded target
+        var line = await db.Lines.FindAsync(log.LineId);
+        bool exceededTarget = false;
+        
+        if (line != null && line.ChangeoverTargetMinutes.HasValue)
+        {
+            exceededTarget = durationMinutes > line.ChangeoverTargetMinutes.Value;
+        }
+
+        await db.SaveChangesAsync();
+
+        return Results.Ok(new 
+        { 
+            Message = "Changeover finalizat!",
+            DurationMinutes = durationMinutes,
+            ExceededTarget = exceededTarget,
+            TargetMinutes = line?.ChangeoverTargetMinutes,
+            RequiresJustification = exceededTarget
+        });
     });
 
     // GET /api/changeover/linestatuses
@@ -100,4 +128,7 @@ namespace MesEnterprise.Endpoints
 }
         }
     }
+
+    public record StartChangeoverRequest(int LineId, int ProductFromId, int ProductToId);
+    public record CompleteChangeoverRequest(int ChangeoverId);
 }
