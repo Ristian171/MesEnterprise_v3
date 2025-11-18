@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.E.S Enterprise - Made by Joja Cristian</title>
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    </head>
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-area">
+
+        <div class="config-page-container">
+            
+            <ul class="breadcrumb">
+                <li><a href="/index.html">Acasă</a></li>
+                <li>Editare Date</li>
+            </ul>
+
+            <div class="config-card" style="max-width: 1200px; margin: 0 auto;">
+                <h3><i class="fa-solid fa-pencil-alt"></i> Editare Manuală Date Producție</h3>
+                <p style="color: var(--color-text-muted); margin-bottom: var(--spacing-m);">
+                    Selectați linia și intervalul de timp pentru a vizualiza și edita înregistrările de producție.
+                </p>
+
+                <fieldset style="margin-bottom: var(--spacing-l);">
+                    <legend>Filtrare Înregistrări</legend>
+                    <div class="form-grid" style="grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-m); align-items: flex-end;">
+                        <div class="form-group" style="margin: 0;">
+                            <label for="filter-linie">Linie</label>
+                            <select id="filter-linie" required>
+                                <option value="">Încărcare linii...</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label for="filter-data-start">Data Început</label>
+                            <input type="text" id="filter-data-start" placeholder="YYYY-MM-DD">
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label for="filter-data-stop">Data Sfârșit</label>
+                            <input type="text" id="filter-data-stop" placeholder="YYYY-MM-DD">
+                        </div>
+                        <button id="search-button" class="btn btn-primary btn-full-width">Caută Înregistrări</button>
+                    </div>
+                </fieldset>
+                
+                <h3 style="margin-top: var(--spacing-l);">Rezultate</h3>
+                <div class="table-container-scroll" style="max-height: 500px;">
+                    <table id="edit-table">
+                        <thead>
+                            <tr>
+                                <th>Dată/Oră Logare</th>
+                                <th>Schimb</th>
+                                <th>Produs</th>
+                                <th>Bune</th>
+                                <th>Scrap</th>
+                                <th>NRFT</th>
+                                <th>Acțiuni</th>
+                            </tr>
+                        </thead>
+                        <tbody id="edit-tbody">
+                            <tr><td colspan="7" style="text-align: center;">Selectați o linie și un interval de timp.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div> 
+        </div> 
+    </main>
+
+    <div id="edit-modal" class="modal hidden">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>Editare Înregistrare</h2>
+                <span id="edit-modal-close" class="close">&times;</span>
+            </div>
+            <form id="edit-modal-form">
+                <div class="modal-body">
+                    <input type="hidden" id="edit-record-id">
+                    <p>Modificați cantitățile pentru înregistrarea selectată. Această acțiune este permanentă și va fi auditată.</p>
+                    
+                    <div class="form-group">
+                        <label>Dată/Oră Logare:</label>
+                        <input type="text" id="edit-timestamp" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Produs:</label>
+                        <input type="text" id="edit-product" disabled>
+                    </div>
+
+                    <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: var(--spacing-m);">
+                        <div class="form-group">
+                            <label for="edit-good">Piese Bune</label>
+                            <input type="number" id="edit-good" min="0" step="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-scrap">Piese Scrap</label>
+                            <input type="number" id="edit-scrap" min="0" step="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-nrft">Piese NRFT</label>
+                            <input type="number" id="edit-nrft" min="0" step="1" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="edit-modal-cancel" class="btn btn-neutral">Anulează</button>
+                    <button type="submit" class="btn btn-primary">Salvează Modificările</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+    <div id="toast-notification"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/edit.js" defer></script>
+</body>
+</html>

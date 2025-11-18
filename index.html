@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.E.S Enterprise - Made by Joja Cristian</title>
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    </head>
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-area">
+        
+        <div class="production-info-bar">
+            <div class="form-group">
+                <label for="line-select">Linie:</label>
+                <select id="line-select" class="header-select"></select>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-select">Produs:</label>
+                <select id="product-select" class="header-select">
+                    <option value="">Alegeți linia...</option>
+                </select>
+            </div>
+            
+            <h4>Schimb: <span id="shift-display">...</span></h4>
+            
+            </div>
+
+        <div class="operator-grid-layout">
+
+            <section class="kpi-section">
+                <div class="counter-box" id="oee-hourly">
+                    <span class="label">OEE (Oră)</span>
+                    <span class="value">0%</span>
+                </div>
+                <div class="counter-box" id="good-parts-hourly">
+                    <span class="label">Bune (Oră)</span>
+                    <span class="value">0</span>
+                </div>
+                <div class="counter-box" id="scrap-parts-hourly">
+                    <span class="label">Scrap (Oră)</span>
+                    <span class="value">0</span>
+                </div>
+                <div class="counter-box" id="target-hourly">
+                    <span class="label">Target (Oră)</span>
+                    <span class="value">0</span>
+                </div>
+                <div class="counter-box" id="target-realtime">
+                    <span class="label">Target (Timp Real)</span>
+                    <span class="value">0</span>
+                </div>
+                <div class="counter-box" id="time-remaining-hourly">
+                    <span class="label">Timp Rămas (Oră)</span>
+                    <span class="value">00:00</span>
+                </div>
+            </section>
+
+            <section class="control-panel-section">
+                <button id="start-button" class="btn-operator" disabled>
+                    <i class="fa-solid fa-play"></i> START PRODUCȚIE
+                </button>
+                <button id="stop-button" class="btn-operator" disabled>
+                    <i class="fa-solid fa-stop"></i> STOP PRODUCȚIE
+                </button>
+                <button id="changeover-button" class="btn-operator" disabled>
+                    <i class="fa-solid fa-right-left"></i> CHANGEOVER
+                </button>
+                <button id="downtime-button" class="btn-operator" disabled>
+                    <i class="fa-solid fa-triangle-exclamation"></i> RAPORTEAZĂ AVARIE
+                </button>
+            </section>
+
+            <section class="main-work-section">
+                
+                <section class="logging-section">
+                    <h3><i class="fa-solid fa-pencil-alt"></i> Logare Producție</h3>
+                    <form id="log-form">
+                        
+                        <div class="form-group">
+                            <label for="log-time-select">Interval Orar</label>
+                            <select id="log-time-select" required disabled>
+                                <option value="">Selectați linia/produsul...</option>
+                            </select>
+                        </div>
+                        
+                        <div class="log-inputs-grid">
+                            <div class="log-input-box">
+                                <label id="log-good-label" for="log-good">Piese Bune</label>
+                                <input type="number" id="log-good" value="0" min="0" step="1" inputmode="numeric">
+                            </div>
+                            <div class="log-input-box">
+                                <label id="log-scrap-label" for="log-scrap">Piese Scrap</label>
+                                <input type="number" id="log-scrap" value="0" min="0" step="1" inputmode="numeric">
+                            </div>
+                            <div class="log-input-box">
+                                <label id="log-nrft-label" for="log-nrft">Piese NRFT</label>
+                                <input type="number" id="log-nrft" value="0" min="0" step="1" inputmode="numeric">
+                            </div>
+                        </div>
+
+                        <button type="submit" id="log-submit-button" class="btn btn-primary btn-full-width" disabled>
+                            <i class="fa-solid fa-save"></i> Salvează Log
+                        </button>
+                        </form>
+                    
+                    </section>
+                
+                <section class="observation-section">
+                    <form id="observation-form">
+                        <h3><i class="fa-solid fa-comment-dots"></i> Observații Schimb</h3>
+                        <div class="form-group">
+                            <textarea id="operator-observation" rows="5" placeholder="Adăugați observații despre calitatea pieselor, probleme minore, etc."></textarea>
+                        </div>
+                        <button type="submit" id="observation-submit" class="btn btn-neutral">Salvează Observații</button>
+                    </form>
+                </section>
+
+            </section> 
+
+            <section class="history-preview-section">
+                <div class="history-preview-header">
+                    <h3><i class="fa-solid fa-history"></i> Istoric Logări (Schimb Curent)</h3>
+                    <button id="refresh-history-btn" class="btn btn-neutral" style="padding: 4px 8px;">
+                        <i class="fa-solid fa-sync" style="margin: 0;"></i>
+                    </button>
+                </div>
+                <div class="table-container-scroll">
+                    <table id="history-table" class="history-log-table">
+                        <thead>
+                            <tr>
+                                <th>Oră</th>
+                                <th>Bune</th>
+                                <th>Scrap</th>
+                                <th>NRFT</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-tbody">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="downtime-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Raportare Avarie (Mentenanță)</h2>
+                <span id="downtime-modal-close" class="close">&times;</span>
+            </div>
+            <form id="downtime-modal-form">
+                <div class="modal-body">
+                    <p>Selectați echipamentul și problema pentru a crea un tichet de mentenanță.</p>
+                    <input type="hidden" id="downtime-modal-line-id">
+                    
+                    <div class="form-group">
+                        <label for="downtime-modal-equipment">Echipament (Stație)</label>
+                        <select id="downtime-modal-equipment" required>
+                            <option value="">Selectați stația...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="downtime-modal-problem">Problema Raportată</label>
+                        <select id="downtime-modal-problem" required>
+                            <option value="">Selectați problema...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="downtime-modal-cancel" class="btn btn-neutral">Anulează</button>
+                    <button type="submit" class="btn btn-danger">Confirmă Avarie și Oprește Linia</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="log-details-modal" class="modal hidden">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2>Detalii Logare (Scrap / NRFT)</h2>
+                <span id="log-details-modal-close" class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                
+                <fieldset>
+                    <legend>1. Staționare Declarată (Opțional)</legend>
+                    <p style="color: var(--color-text-muted); font-size: 0.9rem;">
+                        Dacă piesele defecte au fost cauzate de o oprire, vă rugăm să o declarați aici.
+                    </p>
+                    <div class="form-grid" style="grid-template-columns: 2fr 1fr; gap: var(--spacing-m);">
+                        <div class="form-group">
+                            <label for="modal-downtime-reason">Motiv Staționare</label>
+                            <select id="modal-downtime-reason">
+                                <option value="">Fără staționare</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-downtime-minutes">Minute Staționare</label>
+                            <input type="number" id="modal-downtime-minutes" min="0" value="0">
+                        </div>
+                    </div>
+                </fieldset>
+                
+                <fieldset style="margin-top: var(--spacing-l);">
+                    <legend>2. Alocare Piese Defecte (Obligatoriu)</legend>
+                    <p>Total piese de alocat (Scrap + NRFT): <strong id="defect-total-to-allocate" style="font-size: 1.2rem;">0</strong></p>
+                    <p>Total piese alocate: <strong id="defect-total-allocated" style="font-size: 1.2rem;">0</strong></p>
+                    
+                    <form id="defect-alloc-form" class="form-grid" style="grid-template-columns: 2fr 2fr 1fr 1fr; gap: var(--spacing-m); align-items: flex-end;">
+                        <div class="form-group" style="margin: 0;">
+                            <label for="defect-category-select">Categorie Defect</label>
+                            <select id="defect-category-select" required>
+                                <option value="">Încărcare...</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label for="defect-code-select">Cod Defect</label>
+                            <select id="defect-code-select" required disabled>
+                                <option value="">Alege categoria...</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label for="defect-quantity-input">Cantitate</label>
+                            <input type="number" id="defect-quantity-input" min="1" step="1" value="1" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Adaugă</button>
+                    </form>
+                    
+                    <h4 style="margin-top: var(--spacing-l);">Defecte Alocate</h4>
+                    <div class="table-container-scroll" style="max-height: 250px;">
+                        <table id="defect-allocation-table">
+                            <thead>
+                                <tr>
+                                    <th>Categorie</th>
+                                    <th>Defect</th>
+                                    <th>Cantitate</th>
+                                    <th>Acțiuni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="defect-allocation-tbody">
+                                <tr><td colspan="4" style="text-align: center;">Niciun defect alocat.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="log-details-modal-cancel" class="btn btn-neutral">Anulează Logarea</button>
+                <button type="button" id="log-details-modal-save" class="btn btn-success">Salvează Logarea și Detaliile</button>
+            </div>
+        </div>
+    </div>
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+    <div id="toast-notification"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/index.js" defer></script>
+
+</body>
+</html>

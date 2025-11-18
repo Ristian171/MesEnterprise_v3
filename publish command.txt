@@ -1,0 +1,1 @@
+dotnet publish MesEnterprise.csproj -c Release -o ./publish

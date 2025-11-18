@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.E.S Enterprise - Made by Joja Cristian</title>
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    </head>
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-area">
+
+        <div class="config-page-container">
+            
+            <ul class="breadcrumb">
+                <li><a href="/index.html">Acasă</a></li>
+                <li><a href="/config.html">Configurare</a></li>
+                <li>Motive & Defecte</li>
+            </ul>
+
+            <div class="config-layout">
+
+                <div id="motive-card" class="config-card">
+                    <h3><i class="fa-solid fa-hand-paper"></i> Motive Staționare (Downtime)</h3>
+                    
+                    <form id="motiv-form">
+                        <input type="hidden" id="motiv-id">
+                        <div class="form-group">
+                            <label for="motiv-cod">Cod Motiv</label>
+                            <input type="text" id="motiv-cod" placeholder="Ex: M01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="motiv-nume">Nume Motiv</label>
+                            <input type="text" id="motiv-nume" placeholder="Ex: Lipsă material" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="motiv-tip">Tip Motiv (Impact OEE)</label>
+                            <select id="motiv-tip" required>
+                                <option value="StopNeplanificat">Stop Neplanificat (Avarii)</option>
+                                <option value="StopPlanificat">Stop Planificat (Mentenanță)</option>
+                                <option value="StopMicro">Micro-Stop (Performanță)</option>
+                                <option value="Changeover">Changeover (Disponibilitate)</option>
+                            </select>
+                        </div>
+                        <div id="motiv-form-actions" class="form-actions">
+                            <button type="submit" class="btn btn-primary">Adaugă Motiv</button>
+                            <button type="button" id="motiv-clear-btn" class="btn btn-neutral hidden">Anulează</button>
+                        </div>
+                    </form>
+                    
+                    <div class="table-container-scroll">
+                        <table id="motive-table">
+                            <thead>
+                                <tr>
+                                    <th>Cod</th>
+                                    <th>Nume</th>
+                                    <th>Tip (OEE)</th>
+                                    <th>Acțiuni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="motive-tbody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div> 
+                
+                <div id="defecte-card" class="config-card">
+                    <h3><i class="fa-solid fa-person-falling-burst"></i> Coduri Defect (Scrap/NRFT)</h3>
+                    
+                    <form id="defect-form">
+                        <input type="hidden" id="defect-id">
+                        <div class="form-group">
+                            <label for="defect-cod">Cod Defect</label>
+                            <input type="text" id="defect-cod" placeholder="Ex: D01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="defect-nume">Nume Defect</label>
+                            <input type="text" id="defect-nume" placeholder="Ex: Zgârietură" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="defect-tip">Tip Defect (Impact OEE)</label>
+                            <select id="defect-tip" required>
+                                <option value="Scrap">Scrap (Pierdere Calitate)</option>
+                                <option value="NRFT">NRFT (Not Right First Time)</option>
+                            </select>
+                        </div>
+                        <div id="defect-form-actions" class="form-actions">
+                            <button type="submit" class="btn btn-primary">Adaugă Defect</button>
+                            <button type="button" id="defect-clear-btn" class="btn btn-neutral hidden">Anulează</button>
+                        </div>
+                    </form>
+
+                    <div class="table-container-scroll">
+                        <table id="defecte-table">
+                            <thead>
+                                <tr>
+                                    <th>Cod</th>
+                                    <th>Nume</th>
+                                    <th>Tip (OEE)</th>
+                                    <th>Acțiuni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="defecte-tbody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div> 
+
+            </div> 
+        </div> 
+    </main>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+    <div id="toast-notification"></div>
+
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/config-defecte.js" defer></script>
+</body>
+</html>

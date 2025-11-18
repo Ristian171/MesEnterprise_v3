@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.E.S Enterprise - Made by Joja Cristian</title>
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    </head>
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-area">
+
+        <div class="config-page-container">
+            
+            <ul class="breadcrumb">
+                <li><a href="/index.html">Acasă</a></li>
+                <li><a href="/config.html">Configurare</a></li>
+                <li>Administrare</li>
+            </ul>
+
+            <div class="config-card">
+                <h3><i class="fa-solid fa-users-cog"></i> Gestionare Utilizatori și Roluri</h3>
+                <p style="color: var(--color-text-muted); margin-bottom: var(--spacing-m);">
+                    Creați utilizatori noi și atribuiți-le roluri (Operator, Technician, Admin).
+                </p>
+
+                <form id="user-form">
+                    <input type="hidden" id="user-id">
+                    
+                    <fieldset>
+                        <legend>Detalii Utilizator</legend>
+                        <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: var(--spacing-m);">
+                            <div class="form-group">
+                                <label for="username">Nume Utilizator (Login)</label>
+                                <input type="text" id="username" placeholder="Ex: popescu.ion" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="full-name">Nume Complet</label>
+                                <input type="text" id="full-name" placeholder="Ex: Popescu Ion" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Parolă</label>
+                                <input type="password" id="password" placeholder="Minim 6 caractere">
+                                <small style="color: var(--color-text-muted);">Completați doar pentru a seta o parolă nouă.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="roles">Roluri</label>
+                                <select id="roles" multiple required>
+                                    <option value="Operator">Operator</option>
+                                    <option value="Technician">Technician</option>
+                                    <option value="Admin">Admin</option>
+                                </select>
+                                <small style="color: var(--color-text-muted);">Țineți CTRL (sau CMD pe Mac) pentru selecție multiplă.</small>
+                            </div>
+                        </div>
+                    </fieldset>
+                    
+                    <div id="user-form-actions" class="form-actions" style="margin-top: var(--spacing-m);">
+                        <button type="submit" class="btn btn-primary">Adaugă Utilizator</button>
+                        <button type="button" id="user-clear-btn" class="btn btn-neutral hidden">Anulează Editarea</button>
+                    </div>
+                </form>
+                
+                <hr style="border: 0; border-top: 1px solid var(--color-border); margin: var(--spacing-l) 0;">
+
+                <h3 style="margin-bottom: var(--spacing-m);">Utilizatori Existenți</h3>
+                <div class="table-container-scroll">
+                    <table id="users-table">
+                        <thead>
+                            <tr>
+                                <th>Nume Utilizator</th>
+                                <th>Nume Complet</th>
+                                <th>Roluri</th>
+                                <th>Acțiuni</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody">
+                            </tbody>
+                    </table>
+                </div>
+            </div> 
+        </div> 
+    </main>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+    <div id="toast-notification"></div>
+
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/config-admin.js" defer></script>
+</body>
+</html>

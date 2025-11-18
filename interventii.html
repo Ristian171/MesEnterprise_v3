@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.E.S Enterprise - Made by Joja Cristian</title>
+    
+    <link rel="stylesheet" href="/style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    </head>
+<body> 
+
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-area">
+        
+        <div class="interventii-page-container">
+
+            <section id="filter-section">
+                <div class="form-group">
+                    <label for="filter-linie">Linie:</label>
+                    <select id="filter-linie" name="filter-linie">
+                        <option value="">Toate Liniile</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filter-produs">Produs:</label>
+                    <select id="filter-produs" name="filter-produs">
+                        <option value="">Toate Produsele</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filter-echipament">Echipament (Stație):</label>
+                    <select id="filter-echipament" name="filter-echipament">
+                        <option value="">Toate Echipamentele</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filter-data">Dată Raportare:</label>
+                    <input type="text" id="filter-data" name="filter-data" placeholder="YYYY-MM-DD">
+                </div>
+                <button id="search-button" class="btn btn-primary">Caută</button>
+            </section>
+
+            <section id="tichete-container">
+                <div id="tichete-header">Tichete Deschise</div>
+                <div id="tichete-list">
+                    <table id="tichete-table" class="history-log-table"> <thead>
+                            <tr>
+                                <th>ID Tichet</th>
+                                <th>Data Raportare</th>
+                                <th>Operator</th>
+                                <th>Linie</th>
+                                <th>Echipament</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tichete-tbody">
+                            <tr>
+                                <td colspan="5" style="text-align: center;">Se încarcă...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="form-container">
+                <form id="interventie-form">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 10px;">Detalii Intervenție</h2>
+                    <input type="hidden" id="tichet-id" name="tichet-id">
+
+                    <fieldset>
+                        <legend>Date Generale (Auto-populate)</legend>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="info-linie">Linie:</label>
+                                <input type="text" id="info-linie" name="info-linie" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="info-echipament">Echipament (Stație):</label>
+                                <input type="text" id="info-echipament" name="info-echipament" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="info-operator">Operator:</label>
+                                <input type="text" id="info-operator" name="info-operator" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="info-data-raportare">Data Raportare:</label>
+                                <input type="text" id="info-data-raportare" name="info-data-raportare" disabled>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Cronologie Intervenție</legend>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="start-data">Data Start Intervenție:</label>
+                                <div class="date-time-group">
+                                    <input type="text" id="start-data" name="start-data" placeholder="Selectați data">
+                                    <button type="button" class="btn-now" data-target-date="start-data" data-target-time="start-ora">Acum</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="start-ora">Ora Start Intervenție:</label>
+                                <input type="text" id="start-ora" name="start-ora" placeholder="Selectați ora">
+                            </div>
+                            <div class="form-group">
+                                <label for="stop-data">Data Stop Intervenție:</label>
+                                 <div class="date-time-group">
+                                    <input type="text" id="stop-data" name="stop-data" placeholder="Selectați data">
+                                    <button type="button" class="btn-now" data-target-date="stop-data" data-target-time="stop-ora">Acum</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="stop-ora">Ora Stop Intervenție:</label>
+                                <input type="text" id="stop-ora" name="stop-ora" placeholder="Selectați ora">
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Detalii Problemă</legend>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="problema-raportata">Descriere Problemă:</label>
+                                <select id="problema-raportata" name="problema-raportata" required>
+                                    <option value="">Selectați problema...</option>
+                                    </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="defectiune-identificata">Defecțiune Identificată:</label>
+                                <select id="defectiune-identificata" name="defectiune-identificata" required>
+                                    <option value="">Selectați defecțiunea...</option>
+                                    </select>
+                            </div>
+                            <div class="form-group full-width hidden" id="altul-group">
+                                <label for="defectiune-text-liber">Altele (specificați):</label>
+                                <textarea id="defectiune-text-liber" name="defectiune-text-liber" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Impact Calitate</legend>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="influenteaza-produsul">Influențează Produsul?</label>
+                                <select id="influenteaza-produsul" name="influenteaza-produsul">
+                                    <option value="false">Nu</option>
+                                    <option value="true">Da</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div id="qs-alert" class="hidden alert-qs">
+                                    <strong>Alertă!</strong> Anunță Tehnician QS!
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div id="form-actions">
+                        <button type="submit" id="save-inprogress-button" class="btn btn-secondary">Salvează (În Lucru)</button>
+                        <button type="submit" id="save-close-button" class="btn btn-primary">Salvează și Închide Tichet</button>
+                    </div>
+
+                </form>
+            </section>
+        </div> 
+    </main>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+    <div id="toast-notification"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/interventii.js" defer></script>
+
+</body>
+</html>

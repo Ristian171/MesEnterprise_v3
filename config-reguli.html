@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.E.S Enterprise - Made by Joja Cristian</title>
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    </head>
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-area">
+
+        <div class="config-page-container">
+            
+            <ul class="breadcrumb">
+                <li><a href="/index.html">Acasă</a></li>
+                <li><a href="/config.html">Configurare</a></li>
+                <li>Reguli & Alerte</li>
+            </ul>
+
+            <div class="config-card">
+                <h3><i class="fa-solid fa-exclamation-triangle"></i> Reguli Automate (Stop la Defect)</h3>
+                <p style="color: var(--color-text-muted); margin-bottom: var(--spacing-m);">
+                    Configurați regulile care opresc automat o linie dacă se raportează un număr X de defecte într-un interval Y de minute.
+                </p>
+
+                <form id="regula-form">
+                    <input type="hidden" id="regula-id">
+                    
+                    <div class="form-grid" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: var(--spacing-m); align-items: flex-end; margin-bottom: var(--spacing-l);">
+                        <div class="form-group" style="margin: 0;">
+                            <label for="linie-id">Selectați Linia</label>
+                            <select id="linie-id" required>
+                                <option value="">Încărcare linii...</option>
+                                </select>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label for="numar-defecte">Nr. Defecte (X)</label>
+                            <input type="number" id="numar-defecte" placeholder="Ex: 5" min="1" step="1" required>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label for="interval-minute">Interval (Y Minute)</label>
+                            <input type="number" id="interval-minute" placeholder="Ex: 60" min="1" step="1" required>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label for="regula-activa">Regulă Activă?</label>
+                            <select id="regula-activa" required>
+                                <option value="true">Da</option>
+                                <option value="false">Nu</option>
+                            </select>
+                        </div>
+                        <div id="regula-form-actions" class="form-actions" style="margin: 0;">
+                            <button type="submit" class="btn btn-primary btn-full-width">Setează Regulă</button>
+                            <button type="button" id="regula-clear-btn" class="btn btn-neutral btn-full-width hidden">Anulează</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="table-container-scroll">
+                    <table id="reguli-table">
+                        <thead>
+                            <tr>
+                                <th>Linie</th>
+                                <th>Regulă</th>
+                                <th>Stare</th>
+                                <th>Acțiuni</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reguli-tbody">
+                            </tbody>
+                    </table>
+                </div>
+            </div> 
+        </div> 
+    </main>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+    <div id="toast-notification"></div>
+
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/config-reguli.js" defer></script>
+</body>
+</html>

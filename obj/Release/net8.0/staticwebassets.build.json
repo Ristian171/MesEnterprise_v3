@@ -1,0 +1,39 @@
+{
+  "Version": 1,
+  "Hash": "6tFbYpB48/Hu9FNZtixW2Wrl8bJ7GoTjSCB+qYqjkyM=",
+  "Source": "MesEnterprise",
+  "BasePath": "_content/MesEnterprise",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "MesEnterprise\\wwwroot",
+      "Source": "MesEnterprise",
+      "ContentRoot": "C:\\Users\\Tehnic\\Documents\\GitHub\\MesEnterprise2-v4\\wwwroot\\",
+      "BasePath": "_content/MesEnterprise",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Tehnic\\Documents\\GitHub\\MesEnterprise2-v4\\wwwroot\\css\\branding.css",
+      "SourceId": "MesEnterprise",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Tehnic\\Documents\\GitHub\\MesEnterprise2-v4\\wwwroot\\",
+      "BasePath": "_content/MesEnterprise",
+      "RelativePath": "css/branding.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\branding.css"
+    }
+  ]
+}

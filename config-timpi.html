@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.E.S Enterprise - Made by Joja Cristian</title>
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    </head>
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-area">
+
+        <div class="config-page-container">
+            
+            <ul class="breadcrumb">
+                <li><a href="/index.html">Acasă</a></li>
+                <li><a href="/config.html">Configurare</a></li>
+                <li>Timpi Planificați</li>
+            </ul>
+
+            <div class="config-card">
+                <h3><i class="fa-solid fa-stopwatch-20"></i> Timpi Planificați (Dummy Time)</h3>
+                <p style="color: var(--color-text-muted); margin-bottom: var(--spacing-m);">
+                    Definiți timpul standard (în minute) alocat pentru oprirea planificată (ex: changeover, curățenie) per produs.
+                </p>
+
+                <form id="timp-planificat-form">
+                    <input type="hidden" id="timp-planificat-id">
+                    
+                    <div class.form-grid style="grid-template-columns: 2fr 1fr 1fr; gap: var(--spacing-m); align-items: flex-end; margin-bottom: var(--spacing-l);">
+                        <div class="form-group" style="margin: 0;">
+                            <label for="produs-id">Selectați Produsul</label>
+                            <select id="produs-id" required>
+                                <option value="">Încărcare produse...</option>
+                                </select>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label for="timp-minute">Timp Planificat (Minute)</label>
+                            <input type="number" id="timp-minute" placeholder="Ex: 45" min="0" step="1" required>
+                        </div>
+                        <div id="timp-planificat-form-actions" class="form-actions" style="margin: 0;">
+                            <button type="submit" class="btn btn-primary btn-full-width">Setează Timp</button>
+                            <button type="button" id="timp-planificat-clear-btn" class="btn btn-neutral btn-full-width hidden">Anulează</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="table-container-scroll">
+                    <table id="timpi-planificati-table">
+                        <thead>
+                            <tr>
+                                <th>Cod Produs</th>
+                                <th>Nume Produs</th>
+                                <th>Timp Planificat (Minute)</th>
+                                <th>Acțiuni</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timpi-planificati-tbody">
+                            </tbody>
+                    </table>
+                </div>
+            </div> 
+        </div> 
+    </main>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+    <div id="toast-notification"></div>
+
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/config-timpi.js" defer></script>
+</body>
+</html>

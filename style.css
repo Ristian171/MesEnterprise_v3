@@ -1,0 +1,1388 @@
+/*
+ * ===================================================================================
+ * FIȘIER: MesSimplu/wwwroot/style.css
+ * ROL: UI/UX Designer
+ * STARE: REFACTORIZAT (Redesign Pagina Operator)
+ *
+ * MODIFICARE (UI/UX Redesign index.html):
+ * - SCHIMBAT .operator-grid-layout: Am eliminat zona "actions"
+ * și am înlocuit-o cu o zonă "controls" (rând de sus) și "main-work" (stânga-jos).
+ * - MODIFICAT .btn-operator: Nu mai sunt pătrate gigantice.
+ * Acum sunt butoane standard, orizontale, plasate în noul "controls".
+ * - ADĂUGAT: Noi clase de layout (.control-panel-section, .main-work-section)
+ * pentru a gestiona noul flux.
+ * - REZULTAT: Ecran mai curat, axat pe logare (frecvență înaltă),
+ * nu pe butoane de stare (frecvență joasă).
+ * ===================================================================================
+ */
+
+/* --- Variabile Globale --- */
+:root {
+    /* Paletă de culori */
+    --color-primary: #007bff;
+    --color-primary-dark: #0056b3;
+    --color-secondary: #6c757d;
+    --color-secondary-dark: #495057;
+    --color-success: #28a745;
+    --color-danger: #dc3545;
+    --color-warn: #ffc107;
+    --color-info: #17a2b8;
+    
+    --color-background: #f4f7f6; /* Fundal general (foarte deschis) */
+    --color-surface: #ffffff;    /* Fundalul cardurilor, modalelor */
+    --color-border: #dee2e6;
+    
+    --color-text: #212529;
+    --color-text-muted: #6c757d;
+    --color-text-on-primary: #ffffff;
+    --color-text-on-danger: #ffffff;
+
+    /* Spațiere */
+    --spacing-xs: 4px;
+    --spacing-s: 8px;
+    --spacing-m: 16px;
+    --spacing-l: 24px;
+    --spacing-xl: 32px;
+
+    /* Tipografie */
+    --font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    --font-size-base: 16px;
+    --font-size-h1: 2.5rem;
+    --font-size-h2: 2rem;
+    --font-size-h3: 1.75rem;
+    --font-size-h4: 1.5rem;
+
+    /* Diverse */
+    --border-radius: 8px;
+    --shadow-small: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Resetare și Elemente de Bază --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: var(--font-size-base);
+}
+
+/*
+ * --- MODIFICARE CHEIE (Full-Screen Layout) ---
+ * 'body' devine containerul principal flex, forțat la 100% din
+ * înălțimea ecranului și ascunde orice scroll de la el însuși.
+ */
+body {
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.6;
+    
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden; /* Previne scroll-ul la nivel de body */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); }
+h4 { font-size: var(--font-size-h4); }
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--spacing-m);
+}
+
+th, td {
+    padding: var(--spacing-s) var(--spacing-m);
+    border: 1px solid var(--color-border);
+    text-align: left;
+}
+
+thead th {
+    background-color: var(--color-background);
+    font-weight: 700;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* --- Elemente de Formular --- */
+.form-group {
+    margin-bottom: var(--spacing-m);
+}
+
+label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="email"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+    width: 100%;
+    padding: var(--spacing-s) var(--spacing-m);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-family: var(--font-family);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+input:focus, select:focus, textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+input[disabled], select[disabled] {
+    background-color: var(--color-background);
+    opacity: 0.7;
+}
+
+fieldset {
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-m);
+    margin-bottom: var(--spacing-m);
+}
+legend {
+    padding: 0 var(--spacing-s);
+    font-weight: 600;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-s);
+}
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin-right: var(--spacing-s);
+}
+.checkbox-group label {
+    margin-bottom: 0;
+    font-weight: 500;
+}
+
+.checkbox-group-container {
+     max-height: 150px;
+     overflow-y: auto;
+     border: 1px solid var(--color-border);
+     padding: var(--spacing-m);
+     border-radius: var(--border-radius);
+     background: #fdfdfd;
+}
+.checkbox-group-container label {
+    font-weight: 500;
+}
+
+
+/* --- Butoane --- */
+.btn {
+    display: inline-block;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: var(--spacing-s) var(--spacing-m);
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: var(--border-radius);
+    transition: all 0.15s ease-in-out;
+}
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+.btn:not(:disabled):hover {
+    opacity: 0.9;
+}
+.btn i {
+    margin-right: var(--spacing-s);
+}
+
+.btn-primary {
+    color: var(--color-text-on-primary);
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+.btn-primary:hover {
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+}
+
+.btn-secondary {
+    color: white;
+    background-color: var(--color-secondary);
+    border-color: var(--color-secondary);
+}
+.btn-secondary:hover {
+    background-color: var(--color-secondary-dark);
+    border-color: var(--color-secondary-dark);
+}
+
+.btn-danger {
+    color: var(--color-text-on-danger);
+    background-color: var(--color-danger);
+    border-color: var(--color-danger);
+}
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-success {
+    color: #fff;
+    background-color: var(--color-success);
+    border-color: var(--color-success);
+}
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-neutral {
+    color: var(--color-text);
+    background-color: #f8f9fa;
+    border-color: var(--color-border);
+}
+.btn-neutral:hover {
+    background-color: #e2e6ea;
+}
+
+.btn-link {
+    font-weight: 400;
+    color: var(--color-primary);
+    text-decoration: none;
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+}
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+.btn-full-width {
+    width: 100%;
+}
+.btn-edit {
+    background-color: var(--color-warn);
+    color: #333;
+    border-color: var(--color-warn);
+}
+.btn-edit:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+
+/*
+ * --- MODIFICARE CHEIE (Layout Full-Screen) ---
+ * Antetul (injectat de nav.js) este fix.
+ */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-s) var(--spacing-l);
+    background-color: var(--color-surface);
+    border-bottom: 2px solid var(--color-border);
+    flex-shrink: 0; /* Antetul nu se micșorează */
+    box-shadow: var(--shadow-small);
+    z-index: 100; /* Stă deasupra conținutului */
+}
+
+header h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    white-space: nowrap;
+}
+
+header nav {
+    display: flex;
+    gap: var(--spacing-s);
+    flex-grow: 1;
+    margin-left: var(--spacing-xl);
+}
+
+header nav a {
+    padding: var(--spacing-s) var(--spacing-m);
+    border-radius: var(--border-radius);
+    color: var(--color-text-muted);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+header nav a:hover {
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+header nav a.active {
+    background-color: var(--color-primary);
+    color: var(--color-text-on-primary);
+}
+
+#user-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-m);
+}
+#username-display {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Stil nou pentru butonul de logout (doar icon) */
+#logout-button {
+    padding: var(--spacing-s);
+    font-size: 1.1rem;
+    background: transparent;
+    color: var(--color-danger);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    line-height: 1;
+}
+#logout-button:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+#logout-button i {
+    margin: 0;
+}
+
+
+/*
+ * --- MODIFICARE CHEIE (Layout Full-Screen) ---
+ * 'main' este acum containerul principal pentru scroll.
+ * Ocupă tot spațiul rămas și permite scroll DOAR pe verticală.
+ */
+main {
+    flex-grow: 1; /* Ocupă spațiul rămas */
+    overflow-y: auto; /* Permite scroll DOAR în 'main' */
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/*
+ * --- STIL NOU (Layout Full-Screen) ---
+ * Acesta este containerul universal pentru TOATE paginile.
+ * Forțează conținutul să ocupe înălțimea rămasă.
+ */
+.main-content-area {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden; /* Conținutul gestionează propriul scroll */
+}
+
+
+/* --- Componente UI Comune --- */
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: var(--spacing-l) auto;
+    padding: var(--spacing-l);
+    background-color: var(--color-surface);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+}
+
+/* Card - Layout standard pentru conținut */
+.config-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+    padding: var(--spacing-l);
+    height: 100%; /* Face cardurile egale în grid */
+    display: flex;
+    flex-direction: column;
+}
+.config-card h3 {
+    margin-top: 0;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--spacing-s);
+}
+
+/* Breadcrumbs (Firimituri) */
+.breadcrumb {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--spacing-m) 0;
+    display: flex;
+    gap: var(--spacing-s);
+    font-size: 0.9rem;
+}
+.breadcrumb li {
+    color: var(--color-text-muted);
+}
+.breadcrumb li a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+.breadcrumb li a:hover {
+    text-decoration: underline;
+}
+.breadcrumb li+li::before {
+    content: '/';
+    margin-right: var(--spacing-s);
+    color: var(--color-text-muted);
+}
+
+
+/* --- Stiluri Pagina Login --- */
+.login-container {
+    max-width: 400px;
+    width: 100%;
+    margin: 10vh auto;
+    padding: var(--spacing-xl);
+    background: var(--color-surface);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+}
+.login-container h1, .login-container h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-l);
+}
+.login-container .error-message {
+    color: var(--color-danger);
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    padding: var(--spacing-m);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-m);
+    text-align: center;
+}
+.login-container button {
+    width: 100%;
+    padding: var(--spacing-m);
+    font-size: 1.1rem;
+}
+
+
+/* =================================================== */
+/* --- Stiluri Pagina Operator (index.html) --- */
+/* =================================================== */
+
+/* Containerul principal al paginii operator */
+.operator-page-container {
+    /* Acesta este acum .main-content-area */
+    /* Nu mai are nevoie de 'height: 100vh' */
+}
+
+/* Bara de informații (Linie, Produs, Schimb) */
+.production-info-bar {
+    padding: var(--spacing-s) var(--spacing-l);
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-between;
+    align-items: center;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+}
+.production-info-bar h3, .production-info-bar h4 {
+    margin: var(--spacing-xs) var(--spacing-m);
+}
+.production-info-bar .form-group {
+    margin: 0;
+    padding: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-s);
+}
+.production-info-bar label {
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+/* Stil pentru noile dropdown-uri din header */
+.header-select {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: var(--spacing-xs);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background-color: #f4f7f6;
+}
+.header-select:disabled {
+     background-color: var(--color-background);
+     opacity: 0.7;
+}
+
+
+/*
+ * --- REDESIGN OPERATOR (UI/UX) ---
+ * Grid-ul principal al operatorului
+ */
+.operator-grid-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "kpi controls controls"
+        "kpi main-work history";
+    flex-grow: 1;
+    gap: var(--spacing-m);
+    padding: var(--spacing-m);
+    overflow: hidden; /* FĂRĂ SCROLL */
+}
+
+/* Zona KPI (Coloana 1) */
+.kpi-section { 
+    grid-area: kpi; 
+    grid-row: 1 / 3; /* Ocupă ambele rânduri */
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 1fr);
+    gap: var(--spacing-m);
+}
+
+/* * --- REDESIGN OPERATOR (UI/UX) ---
+ * Noul Panou de Control (sus)
+ */
+.control-panel-section { 
+    grid-area: controls; 
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-m);
+
+    background-color: var(--color-surface);
+    padding: var(--spacing-m);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+}
+
+/* * --- REDESIGN OPERATOR (UI/UX) ---
+ * Zona principală de lucru (stânga-jos)
+ * Acum conține logarea ȘI observațiile
+ */
+.main-work-section {
+    grid-area: main-work;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-m);
+    overflow-y: auto; /* Permite scroll doar în această zonă */
+}
+
+/* Cardul de Logare (în .main-work-section) */
+.logging-section { 
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-m);
+    background-color: var(--color-surface);
+    padding: var(--spacing-m);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+    flex-shrink: 0; /* Logarea nu se micșorează */
+}
+
+/* Cardul de Observații (în .main-work-section) */
+.observation-section {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-surface);
+    padding: var(--spacing-m);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+    flex-grow: 1; /* Observațiile umplu spațiul rămas */
+}
+
+#observation-form {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Formularul umple cardul */
+}
+#observation-form .form-group {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+#operator-observation {
+    flex-grow: 1; 
+    resize: none; 
+}
+
+/* Zona Istoric (dreapta-jos) */
+.history-preview-section { 
+    grid-area: history; 
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-m);
+    background-color: var(--color-surface);
+    padding: var(--spacing-m);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+    overflow: hidden; 
+}
+
+
+/* Stiluri comune pentru cardurile din grid */
+.logging-section h3, 
+.observation-section h3, 
+.history-preview-section h3 {
+     margin-top: 0;
+     margin-bottom: var(--spacing-m);
+     padding-bottom: var(--spacing-s);
+     border-bottom: 1px solid var(--color-border);
+     flex-shrink: 0;
+}
+
+#log-form, #observation-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-m);
+    flex-shrink: 0; 
+}
+
+.log-inputs-grid {
+     display: grid;
+     grid-template-columns: repeat(3, 1fr);
+     gap: var(--spacing-m);
+}
+
+.log-input-box {
+    display: flex;
+    flex-direction: column;
+}
+.log-input-box label {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+}
+.log-input-box input[type="number"] {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    padding: var(--spacing-m);
+}
+#log-good-label { color: var(--color-success); }
+#log-good { border: 2px solid var(--color-success); }
+#log-scrap-label { color: var(--color-danger); }
+#log-scrap { border: 2px solid var(--color-danger); }
+#log-nrft-label { color: var(--color-warn); }
+#log-nrft { border: 2px solid var(--color-warn); }
+
+
+.downtime-group-grid {
+    display: grid;
+    grid-template-columns: 1fr 120px;
+    gap: var(--spacing-s);
+    align-items: flex-end;
+    background-color: var(--color-background);
+    padding: var(--spacing-m);
+    border-radius: var(--border-radius);
+}
+ .downtime-group-grid .form-group {
+     margin-bottom: 0;
+ }
+
+/* Stiluri pentru Preview Istoric */
+.history-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-m);
+    padding-bottom: var(--spacing-s);
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+}
+.history-preview-header h3 {
+    margin: 0;
+}
+.history-preview-section .table-container-scroll {
+     border: 1px solid var(--color-border);
+     border-radius: var(--border-radius);
+     flex-grow: 1; /* Ocupă spațiul rămas */
+     overflow-y: auto;
+}
+
+
+/* Cardurile/Casetele pentru KPI-uri */
+.counter-box {
+    background-color: var(--color-surface);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-m);
+    box-shadow: var(--shadow-small);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-left: 5px solid var(--color-primary);
+}
+.counter-box .label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+.counter-box .value {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-primary);
+}
+#good-parts-hourly { color: var(--color-success); border-color: var(--color-success); }
+#scrap-parts-hourly { color: var(--color-danger); border-color: var(--color-danger); }
+#oee-hourly { color: var(--color-warn); border-color: var(--color-warn); }
+#target-hourly { color: var(--color-text); border-color: var(--color-text); }
+#target-realtime { color: var(--color-secondary); border-color: var(--color-secondary); }
+#time-remaining-hourly { color: var(--color-info); border-color: var(--color-info); }
+
+
+/*
+ * --- REDESIGN OPERATOR (UI/UX) ---
+ * Butoanele de acțiune
+ * - Nu mai sunt pătrate
+ * - Sunt butoane normale, care cresc pentru a umple spațiul
+ */
+.btn-operator {
+    display: flex;
+    flex-direction: row; /* Modificat din column */
+    justify-content: center;
+    align-items: center;    
+    flex-grow: 1;
+
+    font-size: 1.1rem; /* Mărit puțin */
+    font-weight: 700;
+    padding: var(--spacing-m);
+    
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small); /* Umbră mai mică */
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.btn-operator:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium); /* Umbră mai mare la hover */
+}
+.btn-operator:not(:disabled):active {
+    transform: translateY(1px);
+    box-shadow: var(--shadow-small);
+}
+.btn-operator i {
+    font-size: 1.2rem; /* Iconiță aliniată */
+    margin-right: var(--spacing-m); /* Spațiu între iconiță și text */
+    margin-bottom: 0; /* Eliminat spațiul de jos */
+}
+
+/* Butoane specifice (culorile rămân) */
+#start-button { background-color: var(--color-success); border-color: var(--color-success); color: white; }
+#stop-button { background-color: var(--color-danger); border-color: var(--color-danger); color: white; }
+#changeover-button { background-color: var(--color-warn); border-color: var(--color-warn); color: #333; }
+/* Butonul de avarie primește stil de pericol */
+#downtime-button { background-color: var(--color-danger); border-color: var(--color-danger); color: white; }
+
+
+/* --- Componente Utilitare --- */
+
+/* Toast / Notificări */
+#toast-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: var(--spacing-m) var(--spacing-l);
+    background-color: var(--color-secondary);
+    color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+    z-index: 1050;
+    /* Inițial ascuns (modificat de JS) */
+    display: none; 
+}
+#toast-notification.success {
+    background-color: var(--color-success);
+}
+#toast-notification.error {
+    background-color: var(--color-danger);
+}
+#toast-notification.warn {
+    background-color: var(--color-warn);
+    color: #333;
+}
+#toast-notification.info {
+    background-color: var(--color-info);
+}
+
+
+/* Loading Overlay */
+#loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 1099;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.spinner {
+    border: 8px solid var(--color-background);
+    border-top: 8px solid var(--color-primary);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* --- Modale --- */
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); 
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* '.hidden' controlează vizibilitatea modalului */
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background-color: var(--color-surface);
+    padding: 0; 
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 600px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+    animation: slide-down 0.3s ease-out;
+}
+@keyframes slide-down {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    padding: var(--spacing-m) var(--spacing-l);
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.modal-body {
+    padding: var(--spacing-l);
+}
+.modal-footer {
+    padding: var(--spacing-m);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-s);
+}
+
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 var(--spacing-s);
+}
+.close:hover,
+.close:focus {
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+
+/* =================================================== */
+/* --- STILURI NOI PENTRU PAGINA DE CONFIGURARE (HUB) --- */
+/* =================================================== */
+
+.config-page-container {
+    /* Containerul principal pentru paginile de config */
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-l);
+}
+
+/* Pagina principală 'config.html' */
+.config-hub-layout {
+    display: grid;
+    /* Grid responsive: 4 coloane pe desktop, 2 pe tabletă, 1 pe mobil */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-l);
+}
+
+.config-hub-card {
+    display: block;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-l);
+    text-decoration: none;
+    color: var(--color-text);
+    box-shadow: var(--shadow-small);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.config-hub-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+    color: var(--color-primary);
+}
+.config-hub-card i {
+    font-size: 2.5rem;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-m);
+}
+.config-hub-card h2 {
+    font-size: 1.5rem;
+    margin: 0 0 var(--spacing-s) 0;
+}
+.config-hub-card p {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+/* Paginile interioare de configurare (ex: config-general.html) */
+.config-layout {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: var(--spacing-l);
+    align-items: flex-start;
+}
+.config-general-layout {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-l);
+    align-items: flex-start;
+}
+.config-general-layout > .config-card {
+    display: flex;
+    flex-direction: column;
+}
+.config-general-layout .table-container-scroll {
+    flex-grow: 1; /* Asigură că tabelul umple cardul */
+}
+
+
+/* --- Stiluri Specifice (Istoric, Tabele, etc.) --- */
+
+.table-container-scroll {
+    overflow-y: auto;
+    max-height: 400px; 
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+}
+.table-container-scroll table {
+    margin-bottom: 0;
+}
+.table-container-scroll thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #e9ecef; 
+}
+
+/* Acțiuni în tabele */
+td.actions {
+    text-align: right;
+    white-space: nowrap;
+}
+td.actions .btn {
+    margin-left: var(--spacing-xs);
+    font-size: 0.9rem;
+    padding: var(--spacing-xs) var(--spacing-s);
+}
+
+.history-log-table {
+    font-size: 0.9rem;
+}
+.history-log-table td, .history-log-table th {
+    padding: var(--spacing-s);
+    text-align: center;
+}
+/* Culori OEE */
+.ok { color: var(--color-success); }
+.bad { color: var(--color-danger); }
+.warn { color: var(--color-warn); }
+tbody tr.warn { background-color: #fffbe6; } /* Pentru justificare */
+
+
+/* =================================================== */
+/* --- Stiluri Pagina Intervenții (interventii.html) --- */
+/* =================================================== */
+
+.interventii-page-container {
+    /* Acesta este acum .main-content-area */
+    /* Layout-ul cu 2 coloane (listă + formular) */
+    display: grid;
+    grid-template-columns: 40% 60%;
+    gap: var(--spacing-m);
+    padding: var(--spacing-m);
+    overflow: hidden; /* Fără scroll pe containerul principal */
+}
+
+/* Secțiunea de Filtrare */
+#filter-section {
+    padding: var(--spacing-m);
+    border-bottom: 2px solid var(--color-border);
+    display: flex;
+    gap: var(--spacing-m);
+    flex-wrap: wrap; 
+    flex-shrink: 0; 
+    background-color: var(--color-surface);
+    align-items: flex-end;
+}
+#filter-section .form-group {
+    margin-bottom: 0;
+}
+
+/* Containerul Listei de Tichete */
+#tichete-container {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-surface);
+    overflow: hidden; /* Ascunde scroll-ul containerului */
+}
+
+#tichete-header {
+    padding: var(--spacing-m);
+    font-size: 1.2em;
+    font-weight: bold;
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+}
+
+#tichete-list {
+    overflow-y: auto; /* DOAR lista face scroll */
+    flex-grow: 1;
+}
+
+#tichete-table tbody tr {
+    cursor: pointer;
+}
+#tichete-table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+#tichete-table tbody tr.selected {
+     background-color: #e0f0ff;
+     font-weight: 600;
+}
+
+/* Containerul Formularului */
+#form-container {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow-y: auto; /* DOAR formularul face scroll */
+    padding: var(--spacing-l);
+    background-color: var(--color-surface);
+}
+
+#interventie-form fieldset {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    padding: var(--spacing-m);
+}
+#interventie-form legend {
+    font-weight: bold;
+    padding: 0 5px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+.date-time-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.date-time-group input[type="text"] {
+    flex-grow: 1;
+}
+.btn-now {
+    padding: 5px 8px;
+    font-size: 0.9em;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    border-radius: var(--border-radius);
+}
+.btn-now:hover {
+     background-color: var(--color-background);
+}
+.alert-qs {
+    background-color: #ffcccc;
+    border: 1px solid #ff0000;
+    color: #d00000;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+#form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+
+/* --- Media Queries (Responsive) --- */
+
+@media (max-width: 1024px) {
+    header {
+        padding: var(--spacing-s) var(--spacing-m);
+    }
+    header nav {
+        margin-left: var(--spacing-l);
+    }
+    
+    /* Layout-uri Config pe Tabletă */
+    .config-layout {
+        grid-template-columns: 1fr; /* O coloană */
+    }
+    .config-general-layout {
+        grid-template-columns: 1fr; /* O coloană */
+    }
+    
+    /* * --- REDESIGN OPERATOR (UI/UX) ---
+     * Layout Operator pe Tabletă
+     */
+    .operator-grid-layout {
+        grid-template-columns: 1fr 1fr; /* 2 coloane */
+        grid-template-rows: auto auto 1fr; 
+        grid-template-areas:
+            "kpi kpi"
+            "controls controls"
+            "main-work history"; /* main-work și history rămân separate */
+        overflow-y: auto; 
+        height: auto;
+    }
+    .kpi-section {
+         grid-row: auto; 
+         grid-template-columns: repeat(3, 1fr); 
+         grid-template-rows: 1fr 1fr;
+    }
+    .main-work-section {
+        overflow-y: visible; /* Fără scroll intern */
+    }
+    .observation-section {
+        flex-grow: 0; /* Nu mai crește */
+        min-height: 250px; /* Înălțime minimă */
+    }
+    
+    /* Layout Intervenții pe Tabletă */
+    .interventii-page-container {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto; /* Pagina devine scrollabilă */
+        padding: var(--spacing-s);
+    }
+    #tichete-container {
+        flex-basis: 300px; /* Înălțime fixă pentru listă */
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+    #form-container {
+        flex-basis: auto; 
+        overflow: visible; /* Fără scroll intern */
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 14px; 
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--spacing-m);
+    }
+    header nav {
+        margin: var(--spacing-m) 0;
+        width: 100%;
+        overflow-x: auto; 
+        white-space: nowrap;
+    }
+    #user-info {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    main {
+        overflow-y: auto; 
+    }
+    
+    .container, .config-page-container {
+        padding: var(--spacing-m);
+        margin: var(--spacing-s) 0;
+    }
+    
+    .login-container {
+        margin: var(--spacing-m);
+        padding: var(--spacing-l);
+        box-shadow: none;
+        border: 1px solid var(--color-border);
+    }
+
+    /* * --- REDESIGN OPERATOR (UI/UX) ---
+     * Layout Operator pe Mobil
+     */
+    .operator-grid-layout {
+        display: flex;
+        flex-direction: column; 
+        overflow-y: auto; 
+        height: auto;
+        padding: var(--spacing-s);
+    }
+    .kpi-section {
+        grid-row: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr; 
+        grid-template-rows: repeat(3, auto);
+        order: 1;
+    }
+    .control-panel-section {
+        order: 2;
+        flex-direction: column; /* Butoanele una sub alta pe mobil */
+    }
+    .main-work-section {
+         order: 3;
+         overflow-y: visible;
+    }
+    .history-preview-section {
+        order: 4;
+        min-height: 300px;
+    }
+
+    .log-inputs-grid {
+         grid-template-columns: 1fr; 
+    }
+    .downtime-group-grid {
+         grid-template-columns: 1fr; 
+    }
+    
+    /* Layout Intervenții pe Mobil */
+     #filter-section {
+         padding: var(--spacing-s);
+     }
+    .interventii-page-container {
+        display: flex;
+        flex-direction: column;
+        padding: var(--spacing-xs);
+    }
+    /* Layout Config pe Mobil */
+    .config-layout {
+         grid-template-columns: 1fr; 
+    }
+
+    .modal-content {
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        border-radius: 0;
+        border: none;
+        display: flex;
+        flex-direction: column;
+    }
+    .modal-body {
+        flex-grow: 1;
+        overflow-y: auto;
+    }
+    @keyframes slide-down {
+        from { transform: none; opacity: 1; }
+        to { transform: none; opacity: 1; }
+    }
+}
+
+/* =================================================== */
+/* --- MODIFICĂRI PENTRU ALOCARE DEFECTE (index.html) --- */
+/* =================================================== */
+
+/* Layout pentru cele 2 butoane de logare (înlocuit de .btn-full-width) */
+.log-actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-m);
+}
+
+/* Stil pentru lista de alocări din modal */
+#defect-allocation-tbody .btn-danger {
+     padding: var(--spacing-xs) var(--spacing-s);
+}
+#defect-allocation-tbody .actions {
+    text-align: center;
+}
+
+/* Culori pentru totalul alocat */
+#defect-total-allocated.ok {
+    color: var(--color-success);
+    font-weight: 700;
+}
+#defect-total-allocated.bad {
+    color: var(--color-danger);
+    font-weight: 700;
+}
+
+/* Asigură că butonul de salvare logare este full-width după eliminarea grilei de acțiuni */
+#log-form .btn-full-width {
+    grid-column: 1 / -1;
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-g">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.E.S Enterprise - Made by Joja Cristian</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-area">
+        <div class="config-page-container">
+            
+            <div class="breadcrumb">
+                <li><a href="/index.html">Acasă</a></li>
+                <li>Configurare</li>
+            </div>
+            
+            <div id="config-hub" class="config-hub-layout">
+                
+                <a href="/config-general.html" class="config-hub-card">
+                    <i class="fa-solid fa-shapes"></i>
+                    <h2>Configurare Generală</h2>
+                    <p>Gestionați Liniile, Echipamentele și Produsele.</p>
+                </a>
+
+                <a href="/config-schimburi.html" class="config-hub-card">
+                    <i class="fa-solid fa-clock"></i>
+                    <h2>Schimburi & Pauze</h2>
+                    <p>Definiți orele de lucru și pauzele programate.</p>
+                </a>
+
+                <a href="/config-defecte.html" class="config-hub-card">
+                    <i class="fa-solid fa-person-falling-burst"></i>
+                    <h2>Motive & Defecte</h2>
+                    <p>Configurați motivele de staționare și codurile de defect.</p>
+                </a>
+                
+                <a href="/config-timpi.html" class="config-hub-card">
+                    <i class="fa-solid fa-stopwatch-20"></i>
+                    <h2>Timpi Planificați</h2>
+                    <p>Setați timpii de oprire planificată (timp dummy) per produs.</p>
+                </a>
+                
+                <a href="/config-mentenanta.html" class="config-hub-card">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <h2>Mentenanță</h2>
+                    <p>Definiți problemele și defecțiunile pentru tichete.</p>
+                </a>
+
+                <a href="/config-reguli.html" class="config-hub-card">
+                    <i class="fa-solid fa-exclamation-triangle"></i>
+                    <h2>Reguli & Alerte</h2>
+                    <p>Setați regulile automate "Stop la Defect" pentru linii.</p>
+                </a>
+                
+                <a href="/config-admin.html" class="config-hub-card">
+                    <i class="fa-solid fa-users-cog"></i>
+                    <h2>Administrare</h2>
+                    <p>Gestionați conturile de utilizatori și rolurile acestora.</p>
+                </a>
+
+                <a href="/config-setari.html" class="config-hub-card">
+                    <i class="fa-solid fa-cogs"></i>
+                    <h2>Setări Sistem</h2>
+                    <p>Modificați setările globale ale aplicației (ex: OEE).</p>
+                </a>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+    <div id="toast-notification"></div>
+
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/config.js" defer></script>
+</body>
+</html>

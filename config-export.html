@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.E.S Enterprise - Made by Joja Cristian</title>
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    </head>
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-area">
+
+        <div class="config-page-container">
+            
+            <ul class="breadcrumb">
+                <li><a href="/index.html">Acasă</a></li>
+                <li><a href="/config.html">Configurare</a></li>
+                <li>Export Date</li>
+            </ul>
+
+            <div class="config-card" style="max-width: 800px; margin: 0 auto;">
+                <h3><i class="fa-solid fa-file-excel"></i> Export Rapoarte</h3>
+                <p style="color: var(--color-text-muted); margin-bottom: var(--spacing-m);">
+                    Selectați tipul de raport, linia și intervalul de timp pentru a genera un fișier Excel.
+                </p>
+
+                <form id="export-form">
+                    <fieldset>
+                        <legend>Opțiuni Export</legend>
+                        <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: var(--spacing-l);">
+                            
+                            <div class="form-group">
+                                <label for="export-tip">Tip Raport</label>
+                                <select id="export-tip" required>
+                                    <option value="">Selectați tipul de raport...</option>
+                                    <option value="oee">Raport OEE (Orar)</option>
+                                    <option value="production">Raport Producție (Detalii Log)</option>
+                                    <option value="downtime">Raport Staționări (Downtime)</option>
+                                    <option value="maintenance">Raport Mentenanță (Tichete)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="export-linie">Linie</label>
+                                <select id="export-linie" required>
+                                    <option value="">Încărcare linii...</option>
+                                    <option value="all">Toate Liniile</option>
+                                    </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="export-data-start">Data Început</label>
+                                <input type="text" id="export-data-start" placeholder="YYYY-MM-DD HH:MM" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="export-data-stop">Data Sfârșit</label>
+                                <input type="text" id="export-data-stop" placeholder="YYYY-MM-DD HH:MM" required>
+                            </div>
+                        </div>
+                    </fieldset>
+                    
+                    <div id="export-form-actions" class="form-actions" style="margin-top: var(--spacing-l);">
+                        <button type="submit" id="export-button" class="btn btn-success btn-full-width">
+                            <i class="fa-solid fa-download"></i> Generează și Descarcă Raport
+                        </button>
+                    </div>
+                </form>
+
+            </div> 
+        </div> 
+    </main>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+    <div id="toast-notification"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/config-export.js" defer></script>
+</body>
+</html>

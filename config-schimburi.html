@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.E.S Enterprise - Made by Joja Cristian</title>
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    </head>
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-area">
+
+        <div class="config-page-container">
+            
+            <ul class="breadcrumb">
+                <li><a href="/index.html">Acasă</a></li>
+                <li><a href="/config.html">Configurare</a></li>
+                <li>Schimburi & Pauze</li>
+            </ul>
+
+            <div class="config-layout">
+
+                <div id="schimburi-card" class="config-card">
+                    <h3><i class="fa-solid fa-clock"></i> Definire Schimburi</h3>
+                    
+                    <form id="schimb-form">
+                        <input type="hidden" id="schimb-id">
+                        <div class="form-group">
+                            <label for="schimb-nume">Nume Schimb</label>
+                            <input type="text" id="schimb-nume" placeholder="Ex: Schimb 1" required>
+                        </div>
+                        <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div class="form-group">
+                                <label for="schimb-start">Ora Start</label>
+                                <input type="text" id="schimb-start" placeholder="HH:MM" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="schimb-end">Ora Sfârșit</label>
+                                <input type="text" id="schimb-end" placeholder="HH:MM" required>
+                            </div>
+                        </div>
+                        <div id="schimb-form-actions" class="form-actions">
+                            <button type="submit" class="btn btn-primary">Adaugă Schimb</button>
+                            <button type="button" id="schimb-clear-btn" class="btn btn-neutral hidden">Anulează</button>
+                        </div>
+                    </form>
+                    
+                    <div class="table-container-scroll">
+                        <table id="schimburi-table">
+                            <thead>
+                                <tr>
+                                    <th>Nume</th>
+                                    <th>Start</th>
+                                    <th>Sfârșit</th>
+                                    <th>Acțiuni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schimburi-tbody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div> 
+                
+                <div id="pauze-card" class="config-card">
+                    <h3><i class="fa-solid fa-mug-saucer"></i> Pauze Programate</h3>
+                    
+                    <form id="pauza-form">
+                        <input type="hidden" id="pauza-id">
+                        <div class="form-group">
+                            <label for="pauza-schimb-id">Selectați Schimbul</label>
+                            <select id="pauza-schimb-id" required>
+                                <option value="">Mai întâi definiți un schimb...</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pauza-nume">Nume Pauză</label>
+                            <input type="text" id="pauza-nume" placeholder="Ex: Pauza de masă" required>
+                        </div>
+                        <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div class="form-group">
+                                <label for="pauza-start">Ora Start</label>
+                                <input type="text" id="pauza-start" placeholder="HH:MM" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="pauza-end">Ora Sfârșit</label>
+                                <input type="text" id="pauza-end" placeholder="HH:MM" required>
+                            </div>
+                        </div>
+                        <div id="pauza-form-actions" class="form-actions">
+                            <button type="submit" class="btn btn-primary">Adaugă Pauză</button>
+                            <button type="button" id="pauza-clear-btn" class="btn btn-neutral hidden">Anulează</button>
+                        </div>
+                    </form>
+
+                    <div class="table-container-scroll">
+                        <table id="pauze-table">
+                            <thead>
+                                <tr>
+                                    <th>Nume Pauză</th>
+                                    <th>Schimb</th>
+                                    <th>Start</th>
+                                    <th>Sfârșit</th>
+                                    <th>Acțiuni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pauze-tbody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div> 
+
+            </div> 
+        </div> 
+    </main>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+    <div id="toast-notification"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/config-schimburi.js" defer></script>
+</body>
+</html>

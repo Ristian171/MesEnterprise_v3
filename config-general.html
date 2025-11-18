@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.E.S Enterprise - Made by Joja Cristian</title>
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    </head>
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-area">
+
+        <div class="config-page-container">
+            
+            <ul class="breadcrumb">
+                <li><a href="/index.html">Acasă</a></li>
+                <li><a href="/config.html">Configurare</a></li>
+                <li>Generală</li>
+            </ul>
+
+            <div class="config-general-layout">
+
+                <div id="linii-card" class="config-card">
+                    <h3><i class="fa-solid fa-industry"></i> Linii de Producție</h3>
+                    
+                    <form id="linie-form">
+                        <input type="hidden" id="linie-id">
+                        <div class="form-group">
+                            <label for="linie-nume">Nume Linie</label>
+                            <input type="text" id="linie-nume" placeholder="Ex: Linia 1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="linie-descriere">Descriere</label>
+                            <input type="text" id="linie-descriere" placeholder="Opțional">
+                        </div>
+                        <div id="linie-form-actions" class="form-actions">
+                            <button type="submit" class="btn btn-primary">Adaugă Linie</button>
+                            <button type="button" id="linie-clear-btn" class="btn btn-neutral hidden">Anulează</button>
+                        </div>
+                    </form>
+                    
+                    <div class="table-container-scroll">
+                        <table id="linii-table">
+                            <thead>
+                                <tr>
+                                    <th>Nume</th>
+                                    <th>Descriere</th>
+                                    <th>Acțiuni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="linii-tbody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div> 
+
+                <div id="echipamente-card" class="config-card">
+                    <h3><i class="fa-solid fa-microchip"></i> Echipamente (Stații)</h3>
+                    
+                    <form id="echipament-form">
+                        <input type="hidden" id="echipament-id">
+                        <div class="form-group">
+                            <label for="echipament-linie-id">Linia Părinte</label>
+                            <select id="echipament-linie-id" required>
+                                <option value="">Selectați linia...</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="echipament-nume">Nume Echipament/Stație</label>
+                            <input type="text" id="echipament-nume" placeholder="Ex: Stația 10" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="echipament-descriere">Descriere</label>
+                            <input type="text" id="echipament-descriere" placeholder="Opțional">
+                        </div>
+                        <div id="echipament-form-actions" class="form-actions">
+                            <button type="submit" class="btn btn-primary">Adaugă Echipament</button>
+                            <button type="button" id="echipament-clear-btn" class="btn btn-neutral hidden">Anulează</button>
+                        </div>
+                    </form>
+
+                    <div class="table-container-scroll">
+                        <table id="echipamente-table">
+                            <thead>
+                                <tr>
+                                    <th>Nume</th>
+                                    <th>Linie Părinte</th>
+                                    <th>Acțiuni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="echipamente-tbody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div> 
+
+                <div id="produse-card" class="config-card" style="grid-column: 1 / -1;"> 
+                    <h3><i class="fa-solid fa-box-open"></i> Produse</h3>
+                      <form id="produs-form" class="form-grid" style="gap: 10px; margin-bottom: 15px;">
+                        <input type="hidden" id="produs-id">
+                        <div class="form-group">
+                            <label for="produs-nume">Nume Produs</label>
+                            <input type="text" id="produs-nume" placeholder="Ex: Produs Exemplu" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="produs-ciclu-target">Timp Ciclu Target (sec)</label>
+                            <input type="number" id="produs-ciclu-target" placeholder="Ex: 30.5" step="0.1" required>
+                        </div>
+                        <div id="produs-form-actions" class="form-actions" style="grid-column: 1 / -1;">
+                            <button type="submit" class="btn btn-primary">Adaugă Produs</button>
+                            <button type="button" id="produs-clear-btn" class="btn btn-neutral hidden">Anulează</button>
+                        </div>
+                    </form>
+
+                    <div class="table-container-scroll">
+                        <table id="produse-table">
+                            <thead>
+                                <tr>
+                                    <th>Cod Produs</th>
+                                    <th>Nume Produs</th>
+                                    <th>Timp Ciclu (sec)</th>
+                                    <th>Acțiuni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="produse-tbody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div> 
+
+            </div> 
+        </div> 
+    </main>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+    <div id="toast-notification"></div>
+
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/config-general.js" defer></script>
+</body>
+</html>

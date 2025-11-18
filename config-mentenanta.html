@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.E.S Enterprise - Made by Joja Cristian</title>
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    </head>
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-area">
+
+        <div class="config-page-container">
+            
+            <ul class="breadcrumb">
+                <li><a href="/index.html">Acasă</a></li>
+                <li><a href="/config.html">Configurare</a></li>
+                <li>Mentenanță</li>
+            </ul>
+
+            <div class="config-layout">
+
+                <div id="probleme-card" class="config-card">
+                    <h3><i class="fa-solid fa-triangle-exclamation"></i> Probleme Raportate (De Operator)</h3>
+                    
+                    <form id="problema-form">
+                        <input type="hidden" id="problema-id">
+                        <div class="form-group">
+                            <label for="problema-nume">Nume Problemă</label>
+                            <input type="text" id="problema-nume" placeholder="Ex: Echipament blocat" required>
+                        </div>
+                        <div id="problema-form-actions" class="form-actions">
+                            <button type="submit" class="btn btn-primary">Adaugă Problemă</button>
+                            <button type="button" id="problema-clear-btn" class="btn btn-neutral hidden">Anulează</button>
+                        </div>
+                    </form>
+                    
+                    <div class="table-container-scroll">
+                        <table id="probleme-table">
+                            <thead>
+                                <tr>
+                                    <th>Nume Problemă</th>
+                                    <th>Acțiuni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="probleme-tbody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div> 
+                
+                <div id="defectiuni-card" class="config-card">
+                    <h3><i class="fa-solid fa-screwdriver-wrench"></i> Defecțiuni Identificate (De Tehnician)</h3>
+                    
+                    <form id="defectiune-form">
+                        <input type="hidden" id="defectiune-id">
+                        <div class="form-group">
+                            <label for="defectiune-nume">Nume Defecțiune</label>
+                            <input type="text" id="defectiune-nume" placeholder="Ex: Senzor defect" required>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="defectiune-este-altul">
+                            <label for="defectiune-este-altul">Este opțiunea "Altul" (permite text liber)?</label>
+                        </div>
+                        <div id="defectiune-form-actions" class="form-actions" style="margin-top: var(--spacing-m);">
+                            <button type="submit" class="btn btn-primary">Adaugă Defecțiune</button>
+                            <button type="button" id="defectiune-clear-btn" class="btn btn-neutral hidden">Anulează</button>
+                        </div>
+                    </form>
+
+                    <div class="table-container-scroll">
+                        <table id="defectiuni-table">
+                            <thead>
+                                <tr>
+                                    <th>Nume Defecțiune</th>
+                                    <th>Este "Altul"?</th>
+                                    <th>Acțiuni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="defectiuni-tbody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div> 
+                
+                <div id="corelatii-card" class="config-card" style="grid-column: 1 / -1;">
+                    <h3><i class="fa-solid fa-link"></i> Corelări (Problemă -> Defecțiune)</h3>
+                    <p style="color: var(--color-text-muted); margin-bottom: var(--spacing-m);">
+                        Asociați defecțiunile probabile cu problemele raportate. Acest lucru va filtra lista pentru tehnicieni în pagina de intervenții.
+                    </p>
+
+                    <form id="corelatie-form">
+                        <div class.form-grid style="grid-template-columns: 1fr 1fr; gap: var(--spacing-l); align-items: flex-start;">
+                            <div class="form-group">
+                                <label for="corelatie-problema-id">1. Selectați Problema Raportată</label>
+                                <select id="corelatie-problema-id" required>
+                                    <option value="">Selectați o problemă...</option>
+                                    </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="corelatie-defectiuni-ids">2. Selectați Defecțiunile Posibile</label>
+                                <div id="corelatie-defectiuni-container" class="checkbox-group-container">
+                                    <p>Selectați o problemă mai întâi...</p>
+                                    </div>
+                            </div>
+                        </div>
+                        <div id="corelatie-form-actions" class="form-actions" style="margin-top: var(--spacing-m);">
+                            <button type="submit" class="btn btn-success">Salvează Corelările</button>
+                        </div>
+                    </form>
+                </div> 
+
+            </div> 
+        </div> 
+    </main>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+    <div id="toast-notification"></div>
+
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/config-mentenanta.js" defer></script>
+</body>
+</html>

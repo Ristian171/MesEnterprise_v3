@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.E.S Enterprise - Made by Joja Cristian</title>
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    </head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-area">
+
+        <div class="config-page-container">
+            
+            <ul class="breadcrumb">
+                <li><a href="/index.html">Acasă</a></li>
+                <li>Ajutor</li>
+            </ul>
+
+            <div class="config-card" style="max-width: 900px; margin: 0 auto;">
+                <h3><i class="fa-solid fa-question-circle"></i> Centru de Ajutor</h3>
+                
+                <p>Aceasta este secțiunea de ajutor pentru aplicația MesSimplu. Aici veți găsi explicații despre fluxurile principale.</p>
+
+                <fieldset style="margin-top: var(--spacing-l);">
+                    <legend>Roluri Utilizatori</legend>
+                    <ul style="margin-top: 0; padding-left: var(--spacing-l);">
+                        <li><strong>Operator:</strong> Poate vizualiza producția, loga piese (bune, scrap, nrft), porni/opri linia, gestiona observații și raporta avarii (crea tichete).</li>
+                        <li><strong>Technician (Tehnician):</strong> Are toate permisiunile Operatorului, plus acces la pagina de Mentenanță (`interventii.html`) pentru a gestiona și închide tichetele de avarie.</li>
+                        <li><strong>Admin:</strong> Are toate permisiunile (Operator + Tehnician), plus acces la pagina de Configurare (`config.html`) și Editare Date (`edit.html`).</li>
+                    </ul>
+                </fieldset>
+
+                <fieldset style="margin-top: var(--spacing-l);">
+                    <legend>Flux Producție (Operator)</legend>
+                    <ol style="margin-top: 0; padding-left: var(--spacing-l);">
+                        <li>Selectați Linia din meniul principal.</li>
+                        <li>Starea liniei este afișată (ex: Oprit, InCurs).</li>
+                        <li>Dacă starea este <strong>Oprit</strong>, apăsați <strong>START PRODUCȚIE</strong> pentru a începe.</li>
+                        <li>Odată ce linia este <strong>InCurs</strong>, folosiți secțiunea <strong>Logare Producție</strong> pentru a introduce cantitățile (Bune, Scrap, NRFT) și apăsați Salvează Log.</li>
+                        <li>Pentru a opri linia, apăsați <strong>STOP PRODUCȚIE</strong>. Vi se va cere să selectați un motiv de oprire (ex: Pauză planificată).</li>
+                    </ol>
+                </fieldset>
+
+                <fieldset style="margin-top: var(--spacing-l);">
+                    <legend>Flux Avarie (Operator & Tehnician)</legend>
+                    <ol style="margin-top: 0; padding-left: var(--spacing-l);">
+                        <li><strong>(Operator)</strong> Dacă linia se defectează, apăsați butonul roșu <strong>RAPORTEAZĂ AVARIE</strong>.</li>
+                        <li><strong>(Operator)</strong> Selectați Echipamentul (Stația) care s-a defectat și Problema observată, apoi confirmați.</li>
+                        <li>Linia va intra în starea <strong>Avarie</strong> (blocată) și un tichet este creat automat.</li>
+                        <li><strong>(Tehnician)</strong> Navigați la pagina <strong>Mentenanță</strong>.</li>
+                        <li><strong>(Tehnician)</strong> Selectați tichetul nou din listă, completați detaliile (cauza, data start/stop) și apăsați <strong>Salvează și Închide Tichet</strong>.</li>
+                        <li>Odată ce tichetul este închis, starea liniei este deblocată și operatorul poate reporni producția.</li>
+                    </ol>
+                </fieldset>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+    <div id="toast-notification"></div>
+
+    <script src="/js/nav.js" defer></script>
+</body>
+</html>
