@@ -1,9 +1,0 @@
-/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/obj/Debug/net8.0/MesEnterprise.csproj.AssemblyReference.cache
-/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/obj/Debug/net8.0/rpswa.dswa.cache.json
-/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/obj/Debug/net8.0/MesEnterprise.GeneratedMSBuildEditorConfig.editorconfig
-/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/obj/Debug/net8.0/MesEnterprise.AssemblyInfoInputs.cache
-/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/obj/Debug/net8.0/MesEnterprise.AssemblyInfo.cs
-/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/obj/Debug/net8.0/MesEnterprise.csproj.CoreCompileInputs.cache
-/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/obj/Debug/net8.0/MesEnterprise.MvcApplicationPartsAssemblyInfo.cs
-/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/obj/Debug/net8.0/MesEnterprise.MvcApplicationPartsAssemblyInfo.cache
-/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/obj/Debug/net8.0/MesEnterprise.sourcelink.json
