@@ -21,24 +21,27 @@ namespace MesEnterprise.Services
                 await db.Database.MigrateAsync();
                 logger.LogInformation("Database migrations applied successfully");
 
-                // Seed default roles
+                // Seed default roles (7 required roles + existing ones)
                 if (!await db.Roles.AnyAsync())
                 {
                     var roles = new[]
                     {
-                        new Role { Name = "Admin", Description = "Administrator with full access" },
-                        new Role { Name = "Operator", Description = "Production operator" },
-                        new Role { Name = "InginerMentenanta", Description = "Maintenance engineer" },
-                        new Role { Name = "PlantManager", Description = "Plant manager" },
-                        new Role { Name = "TeamLeader", Description = "Team leader" },
-                        new Role { Name = "Quality", Description = "Quality inspector" },
-                        new Role { Name = "Warehouse", Description = "Warehouse operator" },
-                        new Role { Name = "Planner", Description = "Production planner" }
+                        new Role { Name = "Admin", Description = "Administrator cu acces complet la toate modulele" },
+                        new Role { Name = "Manager", Description = "Manager - vizualizare rapoarte și monitorizare" },
+                        new Role { Name = "Inginer", Description = "Inginer - configurări, planificare TPM, targets" },
+                        new Role { Name = "Operator", Description = "Operator producție - logare piese, raportare probleme" },
+                        new Role { Name = "TeamLeader", Description = "Team Leader - coordonare echipă, rapoarte" },
+                        new Role { Name = "Tehnician", Description = "Tehnician producție - intervenții tehnice" },
+                        new Role { Name = "TehnicianMentenanta", Description = "Tehnician mentenanță - TPM, spare parts" },
+                        // Additional roles for extended functionality
+                        new Role { Name = "Quality", Description = "Inspector calitate" },
+                        new Role { Name = "Warehouse", Description = "Operator depozit" },
+                        new Role { Name = "Planner", Description = "Planificator producție" }
                     };
                     
                     db.Roles.AddRange(roles);
                     await db.SaveChangesAsync();
-                    logger.LogInformation("Default roles created");
+                    logger.LogInformation("Default roles created (7 primary + 3 extended)");
                 }
 
                 // Seed admin user

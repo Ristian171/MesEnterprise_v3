@@ -55,6 +55,7 @@ namespace MesEnterprise.Data
 
         // Inventory
         public DbSet<SparePart> SpareParts { get; set; }
+        public DbSet<SparePartUsage> SparePartUsages { get; set; }
         public DbSet<RawMaterial> RawMaterials { get; set; }
         public DbSet<ProductBOM> ProductBOMs { get; set; }
 
