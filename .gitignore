@@ -32,6 +32,13 @@ node_modules/
 publish/
 [Pp]ublish/
 
+# Build artifacts
+*.dll
+*.exe
+*.pdb
+bin/
+obj/
+
 # NuGet packages
 *.nupkg
 *.snupkg
