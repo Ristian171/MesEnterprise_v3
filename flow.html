@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.E.S Enterprise - Flow Proces</title>
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-area">
+
+        <div class="config-page-container">
+            
+            <ul class="breadcrumb">
+                <li><a href="/index.html">Acasă</a></li>
+                <li>Flow Proces MES</li>
+            </ul>
+
+            <div class="config-card">
+                <h2><i class="fa-solid fa-diagram-project"></i> Flow Proces MES</h2>
+                <p style="color: var(--color-text-muted); margin-bottom: var(--spacing-l);">
+                    Această pagină explică procesul complet de utilizare a sistemului MES Enterprise, 
+                    inclusiv funcționalitățile Live Scan și OEE Target.
+                </p>
+
+                <!-- Configurare Inițială -->
+                <section style="margin-bottom: var(--spacing-xl);">
+                    <h3><i class="fa-solid fa-cogs"></i> 1. Configurare Inițială (Administrator)</h3>
+                    <div style="padding-left: var(--spacing-l);">
+                        <h4>1.1. Configurare Linie de Producție</h4>
+                        <ul>
+                            <li>Accesați pagina de <strong>Configurare → Linii</strong></li>
+                            <li>Definiți linia de producție cu toate detaliile necesare</li>
+                            <li>Pentru a activa funcționalitatea Live Scan:
+                                <ul>
+                                    <li>Bifați opțiunea <strong>"Activează Scanare Live"</strong> (Has Live Scanning)</li>
+                                    <li>Setați un <strong>identificator unic</strong> pentru stația de scan (ex: SCAN-L1, SCAN-L2)</li>
+                                    <li>Acest identificator va fi folosit de stația de scan pentru a trimite date către linie</li>
+                                </ul>
+                            </li>
+                            <li>Setați <strong>Target OEE</strong> pentru linie (ex: 85%) - va fi folosit pentru notificări de justificare</li>
+                        </ul>
+
+                        <h4>1.2. Configurare Produse</h4>
+                        <ul>
+                            <li>Accesați <strong>Configurare → Produse</strong></li>
+                            <li>Definiți produsele cu timpii de ciclu (secunde/piesă)</li>
+                            <li>Aceste timpi sunt folosiți pentru calculul targeturilor orare</li>
+                        </ul>
+
+                        <h4>1.3. Configurare Schimburi</h4>
+                        <ul>
+                            <li>Accesați <strong>Configurare → Schimburi</strong></li>
+                            <li>Definiți schimburile de lucru cu orele de start/sfârșit</li>
+                            <li>Sistemul detectează automat schimbul curent</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Configurare Stație Scan -->
+                <section style="margin-bottom: var(--spacing-xl);">
+                    <h3><i class="fa-solid fa-barcode"></i> 2. Configurare Stație Scan (Tehnician/Operator)</h3>
+                    <div style="padding-left: var(--spacing-l);">
+                        <p><strong>Configurare unică pe tabletă/dispozitiv de scan:</strong></p>
+                        <ol>
+                            <li>Accesați pagina <strong>/scan.html</strong> pe dispozitivul dedicat scanării</li>
+                            <li>La prima accesare, vi se va cere să introduceți <strong>codul identificator</strong> al stației</li>
+                            <li>Introduceți identificatorul configurat de admin pentru linia respectivă (ex: SCAN-L1)</li>
+                            <li>Identificatorul se salvează în localStorage și nu mai trebuie introdus din nou</li>
+                            <li>Pentru a schimba identificatorul, apăsați butonul "Schimbă" din pagina de scan</li>
+                        </ol>
+                        <div style="padding: var(--spacing-m); background-color: var(--color-info-bg); border-left: 4px solid var(--color-info); border-radius: 4px; margin-top: var(--spacing-m);">
+                            <p style="margin: 0;"><i class="fa-solid fa-info-circle"></i> 
+                            <strong>Important:</strong> Stația de scan trebuie configurată o singură dată. După aceea, operatorul doar scanează codurile de bare, iar sistemul le procesează automat.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Operare Zilnică -->
+                <section style="margin-bottom: var(--spacing-xl);">
+                    <h3><i class="fa-solid fa-industry"></i> 3. Operare Zilnică</h3>
+                    
+                    <div style="padding-left: var(--spacing-l);">
+                        <h4>3.1. Start Producție (Operator la Linie)</h4>
+                        <ol>
+                            <li>Accesați pagina principală (<strong>index.html</strong>)</li>
+                            <li>Selectați <strong>Linia</strong> și <strong>Produsul</strong> din meniurile dropdown</li>
+                            <li>Apăsați butonul <strong>"START PRODUCȚIE"</strong></li>
+                            <li>Linia intră în stare "Running" și poate începe producția</li>
+                        </ol>
+
+                        <h4>3.2. Utilizare Live Scan</h4>
+                        <p><strong>Starea indicatorului de scan (afișat în pagina de operator):</strong></p>
+                        <ul>
+                            <li><span style="color: var(--color-success); font-weight: 600;">✓ Stație scan activă</span> - Live Scan este pornit, piesele se înregistrează automat la fiecare scan</li>
+                            <li><span style="color: var(--color-warning); font-weight: 600;">⚠ Stație scan disponibilă (Live Scan dezactivat)</span> - Stația este configurată dar Live Scan este oprit temporar</li>
+                            <li><span style="color: var(--color-text-muted); font-weight: 600;">○ Stație scan neconfigurată</span> - Nu există configurare de scan pentru această linie</li>
+                        </ul>
+
+                        <p><strong>Activare/Dezactivare Live Scan:</strong></p>
+                        <ul>
+                            <li>Operatorul poate activa/dezactiva Live Scan din pagina principală folosind butonul dedicat</li>
+                            <li>Când Live Scan este <strong>activ</strong>:
+                                <ul>
+                                    <li>Fiecare scan de la stația de scan înregistrează automat o piesă bună</li>
+                                    <li>Câmpul "Piese Bune" devine read-only (nu poate fi editat manual)</li>
+                                    <li>Se afișează mesajul: "Mod Live Scan activ – piesele bune sunt înregistrate automat din scan"</li>
+                                    <li>Istoricul afișează intrări de tip "Piesă bună (scan)" în timp real</li>
+                                </ul>
+                            </li>
+                            <li>Când Live Scan este <strong>dezactivat</strong>:
+                                <ul>
+                                    <li>Scan-urile sunt primite dar ignorate (nu se înregistrează piese)</li>
+                                    <li>Operatorul poate introduce manual piesele bune în formular</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h4>3.3. Logare Producție Manuală</h4>
+                        <p>Chiar dacă Live Scan este activ, operatorul trebuie să logheze periodic:</p>
+                        <ul>
+                            <li><strong>Piese Scrap</strong> - piese defecte irecu perabile</li>
+                            <li><strong>Piese NRFT</strong> - piese care necesită reprelucrare</li>
+                            <li><strong>Minute de staționare</strong> (downtime) cu motivul aferent</li>
+                        </ul>
+                        <p>Aceste date se introduc în formularul de logare producție pentru intervalul orar dorit.</p>
+
+                        <h4>3.4. Raportare Avarie</h4>
+                        <ul>
+                            <li>La apariția unei avarii, apăsați butonul <strong>"RAPORTEAZĂ AVARIE"</strong></li>
+                            <li>Selectați echipamentul și problema raportată</li>
+                            <li>Se creează automat un tichet de intervenție</li>
+                            <li>Linia trece în stare "Breakdown"</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- OEE Target și Justificări -->
+                <section style="margin-bottom: var(--spacing-xl);">
+                    <h3><i class="fa-solid fa-chart-line"></i> 4. OEE Target și Justificări</h3>
+                    <div style="padding-left: var(--spacing-l);">
+                        <h4>4.1. Ce este OEE Target?</h4>
+                        <p>OEE (Overall Equipment Effectiveness) Target reprezintă procentul țintă de eficiență pe care linia trebuie să îl atingă.</p>
+                        <p><strong>Calcul OEE:</strong> OEE = (Piese Bune Produse / Piese Planificate) × 100</p>
+                        <p><strong>Exemplu:</strong> Dacă targetul orar este 100 piese și s-au făcut 85 piese bune, OEE = 85%</p>
+
+                        <h4>4.2. Când apare cererea de justificare?</h4>
+                        <p>La sfârșitul unui interval (oră/schimb), dacă:</p>
+                        <ul>
+                            <li><strong>OEE < OEE Target</strong> pentru linia respectivă</li>
+                            <li>ȘI <strong>NU există justificări suficiente</strong> deja înregistrate</li>
+                        </ul>
+                        <p>Atunci sistemul va afișa un prompt către operator: <em>"Targetul de OEE nu a fost atins. De ce nu s-a făcut targetul de piese?"</em></p>
+
+                        <h4>4.3. Ce sunt "justificări suficiente"?</h4>
+                        <p>Sistemul consideră că există justificări suficiente dacă operatorul a înregistrat:</p>
+                        <ul>
+                            <li><strong>Downtime</strong> (minute de staționare) cu motiv declarat</li>
+                            <li>SAU <strong>Piese Scrap/NRFT</strong> cu motive/comentarii introduse</li>
+                        </ul>
+                        <p>Dacă aceste date există și explică gap-ul de performanță, promptul NU va apărea.</p>
+
+                        <h4>4.4. Cum se răspunde la prompt?</h4>
+                        <ul>
+                            <li>Operatorul introduce motivul în câmpul de text (obligatoriu)</li>
+                            <li>Exemplu: "Materie primă de calitate slabă", "Probleme mecanice rezolvate rapid", etc.</li>
+                            <li>După salvare, promptul nu va mai apărea pentru acel interval</li>
+                        </ul>
+
+                        <div style="padding: var(--spacing-m); background-color: var(--color-warn); border-left: 4px solid var(--color-danger); border-radius: 4px; margin-top: var(--spacing-m);">
+                            <p style="margin: 0;"><i class="fa-solid fa-exclamation-triangle"></i> 
+                            <strong>Important:</strong> Promptul de justificare apare o singură dată per interval. După ce operatorul dă o justificare, aceasta este salvată permanent în sistem.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Monitorizare și Rapoarte -->
+                <section style="margin-bottom: var(--spacing-xl);">
+                    <h3><i class="fa-solid fa-chart-bar"></i> 5. Monitorizare și Rapoarte</h3>
+                    <div style="padding-left: var(--spacing-l);">
+                        <ul>
+                            <li><strong>Dashboard Operator:</strong> Afișează în timp real KPI-urile orare (OEE, piese bune, scrap, target)</li>
+                            <li><strong>Istoric Schimb:</strong> Tabel cu toate intrările de producție pe schimbul curent</li>
+                            <li><strong>Observații:</strong> Operatorul poate adăuga observații generale despre condiții, probleme, etc.</li>
+                            <li><strong>Rapoarte Export:</strong> Administratorii pot exporta date pentru analiză (Excel, CSV)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Rezumat Flow -->
+                <section style="margin-bottom: var(--spacing-xl);">
+                    <h3><i class="fa-solid fa-list-check"></i> 6. Rezumat Flow Complet</h3>
+                    <div style="padding: var(--spacing-m); background-color: var(--color-background); border-radius: var(--border-radius);">
+                        <ol style="line-height: 1.8;">
+                            <li><strong>Admin:</strong> Configurează linii, produse, schimburi, și activează Live Scan cu identificator unic</li>
+                            <li><strong>Tehnician:</strong> Configurează stația de scan (o singură dată) cu identificatorul liniei</li>
+                            <li><strong>Operator (zi cu zi):</strong>
+                                <ul>
+                                    <li>Selectează linie + produs și pornește producția</li>
+                                    <li>Activează/dezactivează Live Scan după necesitate</li>
+                                    <li>Stația de scan trimite automat piese bune (când Live Scan e activ)</li>
+                                    <li>Loghează manual scrap, NRFT, downtime</li>
+                                    <li>Răspunde la prompt-uri de justificare OEE (dacă targetul nu e atins)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Management:</strong> Monitorizează performanța, analizează rapoarte, ajustează targete</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- Sfaturi și Best Practices -->
+                <section style="margin-bottom: var(--spacing-xl);">
+                    <h3><i class="fa-solid fa-lightbulb"></i> 7. Sfaturi și Best Practices</h3>
+                    <div style="padding-left: var(--spacing-l);">
+                        <ul>
+                            <li>✓ Activați Live Scan doar când producția rulează normal și stația de scan funcționează corect</li>
+                            <li>✓ Dezactivați Live Scan în timpul setup-urilor, verificărilor, sau când se lucrează manual</li>
+                            <li>✓ Loghați downtimele imediat ce apar - acest lucru ajută la evitarea prompt-urilor de justificare</li>
+                            <li>✓ Dacă OEE-ul este constant sub target, discutați cu managementul pentru ajustarea targetului sau îmbunătățirea procesului</li>
+                            <li>✓ Folosiți câmpul de observații pentru a nota orice situație neobișnuită care ar putea afecta producția</li>
+                        </ul>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+    <div id="toast-notification"></div>
+
+    <script src="/js/nav.js" defer></script>
+</body>
+</html>

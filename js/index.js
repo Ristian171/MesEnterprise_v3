@@ -85,6 +85,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const defectTotalAllocated = document.getElementById("defect-total-allocated");
     const defectAllocationTbody = document.getElementById("defect-allocation-tbody");
 
+    // --- Elemente DOM Live Scan ---
+    const liveScanSection = document.getElementById("live-scan-section");
+    const scanStatusText = document.getElementById("scan-status-text");
+    const toggleLiveScanButton = document.getElementById("toggle-live-scan");
+    const liveScanInfo = document.getElementById("live-scan-info");
 
     // --- Stare Aplicație ---
     let token = localStorage.getItem('token');
@@ -177,6 +182,9 @@ document.addEventListener("DOMContentLoaded", () => {
         defectCategorySelect.addEventListener("change", populateDefectCodes);
         defectAllocForm.addEventListener("submit", handleAddDefectAllocation);
         defectAllocationTbody.addEventListener("click", handleDeleteDefectAllocation);
+        
+        // Live Scan toggle
+        toggleLiveScanButton.addEventListener("click", toggleLiveScan);
     }
 
     // --- Încărcare Date Configurare ---
@@ -361,6 +369,69 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // --- Live Scan Functions ---
+    
+    function updateLiveScanUI(status) {
+        if (!status || !status.scanIdentifier) {
+            // No scan identifier configured - hide section
+            liveScanSection.style.display = 'none';
+            return;
+        }
+        
+        liveScanSection.style.display = 'block';
+        
+        if (!status.liveScanAvailable) {
+            // Stație scan neconfigurată
+            scanStatusText.textContent = 'Stație scan neconfigurată';
+            scanStatusText.style.color = 'var(--color-text-muted)';
+            toggleLiveScanButton.style.display = 'none';
+            liveScanInfo.style.display = 'none';
+            logGoodInput.disabled = false;
+        } else if (status.liveScanEnabled) {
+            // Stație scan activă
+            scanStatusText.textContent = 'Stație scan activă';
+            scanStatusText.style.color = 'var(--color-success)';
+            toggleLiveScanButton.style.display = 'inline-block';
+            toggleLiveScanButton.textContent = 'Dezactivează Live Scan';
+            toggleLiveScanButton.className = 'btn btn-secondary';
+            liveScanInfo.style.display = 'block';
+            // Make good parts readonly when Live Scan is active
+            logGoodInput.disabled = true;
+            logGoodInput.title = 'Câmp dezactivat - Live Scan activ';
+        } else {
+            // Stație scan disponibilă (Live Scan dezactivat)
+            scanStatusText.textContent = 'Stație scan disponibilă (Live Scan dezactivat)';
+            scanStatusText.style.color = 'var(--color-warning)';
+            toggleLiveScanButton.style.display = 'inline-block';
+            toggleLiveScanButton.textContent = 'Activează Live Scan';
+            toggleLiveScanButton.className = 'btn btn-primary';
+            liveScanInfo.style.display = 'none';
+            logGoodInput.disabled = false;
+            logGoodInput.title = '';
+        }
+    }
+    
+    async function toggleLiveScan() {
+        if (!currentLineId) return;
+        
+        showLoading(true);
+        try {
+            const newState = !currentStatus.liveScanEnabled;
+            await apiCall(`/api/line/${currentLineId}/live-scan`, {
+                method: 'PUT',
+                body: JSON.stringify({ enabled: newState })
+            });
+            
+            // Refresh status
+            await getLineStatus();
+            showToast(newState ? 'Live Scan activat' : 'Live Scan dezactivat', 'success');
+        } catch (error) {
+            // Error already shown
+        } finally {
+            showLoading(false);
+        }
+    }
+
     // --- Actualizare UI ---
 
     function updateUIfromStatus(status) {
@@ -403,6 +474,9 @@ document.addEventListener("DOMContentLoaded", () => {
         targetDisplay.textContent = status.currentHourTarget;
         targetRealtimeDisplay.textContent = status.realTimeTarget;
         timeRemainingDisplay.textContent = status.timeRemaining || "00:00";
+        
+        // Update Live Scan UI
+        updateLiveScanUI(status);
         
         loadHistory();
         

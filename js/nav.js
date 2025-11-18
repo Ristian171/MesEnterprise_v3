@@ -66,19 +66,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const navLinks = {
         Operator: [
             { href: "/index.html", text: "Producție" },
-            { href: "/changeover.html", text: "Changeover" }
+            { href: "/changeover.html", text: "Changeover" },
+            { href: "/scan.html", text: "Scanare" },
+            { href: "/flow.html", text: "Flow / Ajutor" }
         ],
         Technician: [
             { href: "/index.html", text: "Producție" },
             { href: "/changeover.html", text: "Changeover" },
-            { href: "/interventii.html", text: "Mentenanță" }
+            { href: "/interventii.html", text: "Mentenanță" },
+            { href: "/scan.html", text: "Scanare" },
+            { href: "/flow.html", text: "Flow / Ajutor" }
         ],
         Admin: [
             { href: "/index.html", text: "Producție" },
             { href: "/changeover.html", text: "Changeover" },
             { href: "/interventii.html", text: "Mentenanță" },
             { href: "/edit.html", text: "Editare Date" },
-            { href: "/config.html", text: "Configurare" }
+            { href: "/config.html", text: "Configurare" },
+            { href: "/scan.html", text: "Scanare" },
+            { href: "/flow.html", text: "Flow / Ajutor" }
         ]
     };
 

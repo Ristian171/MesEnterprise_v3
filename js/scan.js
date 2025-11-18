@@ -34,6 +34,31 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
+        // Load or prompt for scan identifier
+        let identifier = localStorage.getItem('scanIdentifier');
+        if (!identifier) {
+            identifier = prompt('Introduceți codul identificator al stației de scan (ex: SCAN-L1):');
+            if (identifier && identifier.trim()) {
+                localStorage.setItem('scanIdentifier', identifier.trim());
+            } else {
+                alert('Identificator necesar pentru funcționarea stației de scan.');
+                return;
+            }
+        }
+        
+        // Display current identifier
+        const identifierDisplay = document.createElement('p');
+        identifierDisplay.style.marginBottom = 'var(--spacing-m)';
+        identifierDisplay.innerHTML = `<strong>Stație:</strong> ${escapeHTML(identifier)} 
+            <button onclick="localStorage.removeItem('scanIdentifier'); location.reload();" 
+                    style="margin-left: var(--spacing-s); font-size: 0.9rem;">
+                Schimbă
+            </button>`;
+        document.querySelector('.config-card').insertBefore(
+            identifierDisplay, 
+            document.getElementById('scan-form')
+        );
+        
         // (UI/UX) Focalizează automat pe câmpul de scanare
         scanInput.focus();
     }
@@ -77,25 +102,40 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        const identifier = localStorage.getItem('scanIdentifier');
+        if (!identifier) {
+            alert('Identificator lipsă. Reîncărcați pagina pentru a configura.');
+            return;
+        }
+
         showLoading(true);
         resultOutput.innerHTML = '<p style="text-align: center;">Se procesează...</p>';
         
         try {
             const data = {
+                identifier: identifier,
                 scanData: scanValue
             };
             
-            // Presupunem endpoint-ul
-            const result = await apiCall('/api/scan', { method: 'POST', body: JSON.stringify(data) });
+            // Call the new endpoint
+            const result = await apiCall('/api/production/scan', { method: 'POST', body: JSON.stringify(data) });
 
             // (UI/UX) Afișare feedback pozitiv
             let resultHtml = `
                 <p style="color: var(--color-success); font-weight: 600; text-align: center; font-size: 1.2rem;">
                     <i class="fa-solid fa-check-circle"></i> Scanare reușită!
                 </p>
-                <p><strong>Acțiune:</strong> ${escapeHTML(result.action)}</p>
-                <p><strong>Detalii:</strong> ${escapeHTML(result.message)}</p>
+                <p><strong>Acțiune:</strong> ${escapeHTML(result.action || 'processed')}</p>
+                <p><strong>Detalii:</strong> ${escapeHTML(result.message || 'Scanare procesată cu succes')}</p>
             `;
+            
+            if (result.lineName) {
+                resultHtml += `<p><strong>Linie:</strong> ${escapeHTML(result.lineName)}</p>`;
+            }
+            if (result.goodParts !== undefined) {
+                resultHtml += `<p><strong>Piese bune (ora curentă):</strong> ${result.goodParts} / ${result.targetParts || '?'}</p>`;
+            }
+            
             resultOutput.innerHTML = resultHtml;
             
             showToast("Scanare procesată.", 'success');
