@@ -22,8 +22,180 @@ namespace MesEnterprise.Endpoints
             
             ConfigureProductionLogApi(productionLogApi);
             ConfigureEditApi(editApi);
+            ConfigureLiveScanApi(app);
             
             return app;
+        }
+        
+        private static void ConfigureLiveScanApi(IEndpointRouteBuilder app)
+        {
+            // POST /api/production/scan - Live Scan endpoint
+            app.MapPost("/api/production/scan", async (
+                [FromBody] ScanRequest request,
+                MesDbContext db) =>
+            {
+                if (string.IsNullOrWhiteSpace(request.Identifier) || string.IsNullOrWhiteSpace(request.ScanData))
+                {
+                    return Results.BadRequest(new { Message = "Identifier și ScanData sunt obligatorii." });
+                }
+
+                // Find line by ScanIdentifier
+                var line = await db.Lines
+                    .FirstOrDefaultAsync(l => l.ScanIdentifier == request.Identifier && l.IsActive);
+
+                if (line == null)
+                {
+                    return Results.BadRequest(new { Message = "Stație scan neconfigurată pentru acest identificator." });
+                }
+
+                // Check if Live Scan is available (configured by Admin)
+                if (!line.HasLiveScanning)
+                {
+                    return Results.BadRequest(new { Message = "Stație scan neconfigurată pentru această linie." });
+                }
+
+                // Check if Live Scan is currently enabled (controlled by Operator)
+                if (!line.LiveScanEnabled)
+                {
+                    return Results.Ok(new 
+                    { 
+                        Message = "Live Scan dezactivat. Scan înregistrat dar nu a fost procesat.", 
+                        Action = "ignored",
+                        LineId = line.Id,
+                        LineName = line.Name
+                    });
+                }
+
+                // Get current line status
+                var lineStatus = await db.LineStatuses
+                    .FirstOrDefaultAsync(ls => ls.LineId == line.Id);
+
+                if (lineStatus == null || lineStatus.ProductId == null)
+                {
+                    return Results.BadRequest(new { Message = "Linia nu are un produs activ. Configurați produsul din pagina de operator." });
+                }
+
+                if (lineStatus.CurrentShiftId == null)
+                {
+                    return Results.BadRequest(new { Message = "Linia nu este într-un schimb activ." });
+                }
+
+                var productId = lineStatus.ProductId.Value;
+                var shiftId = lineStatus.CurrentShiftId.Value;
+
+                // Get current time and interval
+                var nowUtc = DateTime.UtcNow;
+                var localNow = TimeZoneInfo.ConvertTimeFromUtc(nowUtc, ApiHelpers.RomaniaTimeZone);
+                var hourInterval = localNow.ToString("HH:00");
+
+                var shift = await db.Shifts.FindAsync(shiftId);
+                var dateToQuery = ApiHelpers.GetShiftDate(nowUtc, shift);
+
+                // Get or create production log for current hour
+                var productionLog = await ApiHelpers.GetOrCreateProductionLog(
+                    db, line.Id, productId, shiftId, hourInterval, dateToQuery);
+
+                // Increment good parts by 1
+                productionLog.ActualParts += 1;
+
+                // Recalculate target
+                productionLog.TargetParts = await ApiHelpers.CalculateTarget(
+                    db, line.Id, productId, shiftId, hourInterval, nowUtc, false);
+
+                await db.SaveChangesAsync();
+
+                return Results.Ok(new
+                {
+                    Message = "Piesă bună înregistrată prin Live Scan.",
+                    Action = "good_part_added",
+                    LineId = line.Id,
+                    LineName = line.Name,
+                    ProductId = productId,
+                    GoodParts = productionLog.ActualParts,
+                    TargetParts = productionLog.TargetParts,
+                    HourInterval = hourInterval
+                });
+            });
+
+            // GET /api/line/status-by-identifier/{identifier} - Get line status by scan identifier
+            app.MapGet("/api/line/status-by-identifier/{identifier}", async (
+                string identifier,
+                MesDbContext db) =>
+            {
+                var line = await db.Lines
+                    .Include(l => l.Department)
+                    .FirstOrDefaultAsync(l => l.ScanIdentifier == identifier && l.IsActive);
+
+                if (line == null)
+                {
+                    return Results.NotFound(new { Message = "Linie negăsită pentru acest identificator." });
+                }
+
+                var lineStatus = await db.LineStatuses
+                    .Include(ls => ls.Product)
+                    .Include(ls => ls.CurrentShift)
+                    .FirstOrDefaultAsync(ls => ls.LineId == line.Id);
+
+                return Results.Ok(new
+                {
+                    Line = new
+                    {
+                        line.Id,
+                        line.Name,
+                        line.ScanIdentifier,
+                        line.HasLiveScanning,
+                        LiveScanAvailable = line.HasLiveScanning,
+                        line.LiveScanEnabled,
+                        Department = line.Department?.Name
+                    },
+                    Status = lineStatus == null ? null : new
+                    {
+                        lineStatus.Status,
+                        lineStatus.LastStatusChange,
+                        Product = lineStatus.Product == null ? null : new
+                        {
+                            lineStatus.Product.Id,
+                            lineStatus.Product.Name
+                        },
+                        Shift = lineStatus.CurrentShift == null ? null : new
+                        {
+                            lineStatus.CurrentShift.Id,
+                            lineStatus.CurrentShift.Name
+                        }
+                    }
+                });
+            });
+
+            // PUT /api/line/{lineId}/live-scan - Enable/disable Live Scan for a line
+            app.MapPut("/api/line/{lineId}/live-scan", async (
+                int lineId,
+                [FromBody] LiveScanToggleRequest request,
+                MesDbContext db) =>
+            {
+                var line = await db.Lines.FindAsync(lineId);
+                if (line == null)
+                {
+                    return Results.NotFound(new { Message = "Linie negăsită." });
+                }
+
+                if (!line.HasLiveScanning)
+                {
+                    return Results.BadRequest(new { Message = "Live Scan nu este disponibil pentru această linie. Configurați în pagina de administrare." });
+                }
+
+                line.LiveScanEnabled = request.Enabled;
+                await db.SaveChangesAsync();
+
+                return Results.Ok(new
+                {
+                    Message = request.Enabled 
+                        ? "Live Scan activat pentru linia " + line.Name
+                        : "Live Scan dezactivat pentru linia " + line.Name,
+                    LineId = line.Id,
+                    LineName = line.Name,
+                    LiveScanEnabled = line.LiveScanEnabled
+                });
+            }).RequireAuthorization("OperatorOrHigher");
         }
         
         private static void ConfigureProductionLogApi(RouteGroupBuilder productionLogApi)

@@ -69,6 +69,14 @@ namespace MesEnterprise.DTOs
         public int CurrentHourScrap { get; init; }
         public double CurrentHourOEE { get; init; }
 
+        // Live Scan properties
+        public string? ScanIdentifier { get; init; }
+        public bool LiveScanAvailable { get; init; }
+        public bool LiveScanEnabled { get; init; }
+
+        // OEE Target property
+        public double? OeeTarget { get; init; }
+
         public required List<TimeSlotDto> AvailableTimeSlots { get; init; }
         public required List<ProductionLogDto> CurrentShiftLogs { get; init; }
     }
@@ -113,6 +121,7 @@ namespace MesEnterprise.DTOs
     public record StartChangeoverRequest(int LineId, int ProductFromId, int ProductToId);
     public record EndChangeoverRequest(int LineId);
     public record ScanRequest(string Identifier, string ScanData);
+    public record LiveScanToggleRequest(bool Enabled);
     public record ProductionLogEditRequest(int ActualParts, int ScrapParts, int NrftParts);
 
     public class AppSettingsDto

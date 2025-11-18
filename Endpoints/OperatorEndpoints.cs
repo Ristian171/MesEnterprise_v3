@@ -267,6 +267,12 @@ namespace MesEnterprise.Endpoints
                     CurrentHourGoodParts = currentHourLog?.ActualParts ?? 0,
                     CurrentHourScrap = currentHourLog?.ScrapParts ?? 0,
                     CurrentHourOEE = currentHourOEE,
+                    // Live Scan info
+                    ScanIdentifier = line.ScanIdentifier,
+                    LiveScanAvailable = line.HasLiveScanning,
+                    LiveScanEnabled = line.LiveScanEnabled,
+                    // OEE Target
+                    OeeTarget = line.OeeTarget,
                     AvailableTimeSlots = availableTimeSlots,
                     CurrentShiftLogs = shiftLogs
                 };
