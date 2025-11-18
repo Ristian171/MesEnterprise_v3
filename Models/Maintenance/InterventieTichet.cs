@@ -7,13 +7,11 @@ namespace MesEnterprise.Models.Maintenance
     {
         public int Id { get; set; }
 
-        [Required, MaxLength(100)]
-        public string UnicIdTicket { get; set; } = string.Empty;
+        public Guid UnicIdTicket { get; set; } = Guid.NewGuid();
 
         public DateTime DataRaportareOperator { get; set; } = DateTime.UtcNow;
 
-        [Required, MaxLength(200)]
-        public string OperatorNume { get; set; } = string.Empty;
+        public string? OperatorNume { get; set; }
 
         public int LineId { get; set; }
         public Line? Line { get; set; }
@@ -21,31 +19,40 @@ namespace MesEnterprise.Models.Maintenance
         public int? ProductId { get; set; }
         public Product? Product { get; set; }
 
-        public int? EquipmentId { get; set; }
+        public int EquipmentId { get; set; }
         public Equipment? Equipment { get; set; }
 
         public int? ProblemaRaportataId { get; set; }
         public ProblemaRaportata? ProblemaRaportata { get; set; }
 
-        public string? DescriereOperator { get; set; }
-
-        [MaxLength(50)]
+        [Required, MaxLength(50)]
         public string Status { get; set; } = "Deschis";
 
-        public DateTime? DataPreluareTehnic { get; set; }
-
-        [MaxLength(200)]
-        public string? TehnicNume { get; set; }
+        public string? TehnicianNume { get; set; }
 
         public int? DefectiuneIdentificataId { get; set; }
         public DefectiuneIdentificata? DefectiuneIdentificata { get; set; }
 
-        public string? CauzaProbabila { get; set; }
+        public string? DefectiuneTextLiber { get; set; }
 
-        public string? ActiuniIntreprinse { get; set; }
+        public bool InfluenteazaProdusul { get; set; }
 
-        public DateTime? DataInchidere { get; set; }
+        public DateTime? DataStartInterventie { get; set; }
 
-        public int? DurataInterventie { get; set; }
+        public DateTime? DataStopInterventie { get; set; }
+
+        public int? DurataMinute { get; set; }
+
+        public string? RootCause { get; set; }
+
+        public string? CorrectiveAction { get; set; }
+
+        public string? PreventiveAction { get; set; }
+
+        public DateTime? CAPADueDate { get; set; }
+
+        public decimal? CostPiese { get; set; }
+
+        public decimal? CostManopera { get; set; }
     }
 }

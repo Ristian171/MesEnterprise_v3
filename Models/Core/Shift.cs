@@ -15,6 +15,6 @@ namespace MesEnterprise.Models.Core
 
         public bool IsActive { get; set; } = true;
 
-        public ICollection<ShiftBreak> ShiftBreaks { get; set; } = new List<ShiftBreak>();
+        public ICollection<ShiftBreak> Breaks { get; set; } = new List<ShiftBreak>();
     }
 }

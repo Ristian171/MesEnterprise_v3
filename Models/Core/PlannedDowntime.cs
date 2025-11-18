@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace MesEnterprise.Models.Core
 {
     public class PlannedDowntime
@@ -12,11 +10,6 @@ namespace MesEnterprise.Models.Core
         public int ProductId { get; set; }
         public Product? Product { get; set; }
 
-        public int PlannedDowntimeSeconds { get; set; }
-
-        [MaxLength(500)]
-        public string? Reason { get; set; }
-
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public double MinutesPerHour { get; set; }
     }
 }

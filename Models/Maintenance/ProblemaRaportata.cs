@@ -6,11 +6,8 @@ namespace MesEnterprise.Models.Maintenance
     {
         public int Id { get; set; }
 
-        [Required, MaxLength(100)]
-        public string Code { get; set; } = string.Empty;
-
-        [Required, MaxLength(300)]
-        public string Description { get; set; } = string.Empty;
+        [Required, MaxLength(200)]
+        public string Nume { get; set; } = string.Empty;
 
         public bool IsActive { get; set; } = true;
 

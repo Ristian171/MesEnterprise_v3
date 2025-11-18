@@ -9,8 +9,11 @@ namespace MesEnterprise.Models.Inventory
         [Required, MaxLength(100)]
         public string MaterialCode { get; set; } = string.Empty;
 
-        [Required, MaxLength(300)]
-        public string Description { get; set; } = string.Empty;
+        [Required, MaxLength(200)]
+        public string Name { get; set; } = string.Empty;
+
+        [MaxLength(1000)]
+        public string? Description { get; set; }
 
         [MaxLength(100)]
         public string? Category { get; set; }
@@ -18,15 +21,15 @@ namespace MesEnterprise.Models.Inventory
         [MaxLength(200)]
         public string? Location { get; set; }
 
-        public decimal ActualStock { get; set; }
+        public decimal QuantityInStock { get; set; }
 
-        public decimal ReorderStock { get; set; }
+        public decimal MinimumStock { get; set; }
 
         [Required, MaxLength(50)]
         public string UnitOfMeasure { get; set; } = string.Empty;
 
         public bool IsActive { get; set; } = true;
 
-        public decimal? UnitCost { get; set; }
+        public decimal UnitCost { get; set; }
     }
 }

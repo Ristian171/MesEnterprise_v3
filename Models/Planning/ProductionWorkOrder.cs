@@ -13,12 +13,12 @@ namespace MesEnterprise.Models.Planning
         public int ProductId { get; set; }
         public Product? Product { get; set; }
 
-        public int? LineId { get; set; }
+        public int LineId { get; set; }
         public Line? Line { get; set; }
 
-        public int QuantityOrdered { get; set; }
+        public int PlannedQuantity { get; set; }
 
-        public int QuantityProduced { get; set; }
+        public int ProducedQuantity { get; set; }
 
         public DateTime PlannedStartDate { get; set; }
 
@@ -28,12 +28,12 @@ namespace MesEnterprise.Models.Planning
 
         public DateTime? ActualEndDate { get; set; }
 
-        [MaxLength(50)]
+        [Required, MaxLength(50)]
         public string Status { get; set; } = "Planned";
 
-        [MaxLength(100)]
-        public string? Priority { get; set; }
-
+        [MaxLength(1000)]
         public string? Notes { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

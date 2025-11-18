@@ -9,10 +9,8 @@ namespace MesEnterprise.Models.Quality
         [Required, MaxLength(200)]
         public string Name { get; set; } = string.Empty;
 
-        [MaxLength(1000)]
-        public string? Description { get; set; }
-
-        public bool IsActive { get; set; } = true;
+        [Required, MaxLength(20)]
+        public string Color { get; set; } = "#000000";
 
         public ICollection<DefectCode> DefectCodes { get; set; } = new List<DefectCode>();
     }
