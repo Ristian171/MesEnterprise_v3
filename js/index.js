@@ -91,6 +91,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const toggleLiveScanButton = document.getElementById("toggle-live-scan");
     const liveScanInfo = document.getElementById("live-scan-info");
 
+    // --- Elemente DOM OEE Justification Modal ---
+    const oeeJustificationModal = document.getElementById("oee-justification-modal");
+    const oeeJustificationModalClose = document.getElementById("oee-justification-modal-close");
+    const oeeJustificationModalSubmit = document.getElementById("oee-justification-modal-submit");
+    const oeeJustificationReason = document.getElementById("oee-justification-reason");
+
     // --- Stare Aplicație ---
     let token = localStorage.getItem('token');
     let currentLineId = null;
@@ -107,7 +113,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentDefectAllocations = []; // Format: [{ categoryName, defectName, defectCodeId, quantity }]
     
     // CORECȚIE STARE CLIENT: Stochează datele logării cât timp modalul este deschis
-    let logDataPendingSave = null; 
+    let logDataPendingSave = null;
+    
+    // Stare pentru justificarea OEE
+    let pendingJustificationLog = null;
 
     // --- Inițializare ---
 
@@ -185,6 +194,10 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Live Scan toggle
         toggleLiveScanButton.addEventListener("click", toggleLiveScan);
+        
+        // OEE Justification modal
+        oeeJustificationModalClose.addEventListener("click", closeJustificationModal);
+        oeeJustificationModalSubmit.addEventListener("click", submitJustification);
     }
 
     // --- Încărcare Date Configurare ---
@@ -339,7 +352,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (currentLineId && currentProductId) {
                     getLineStatus();
                 }
-            }, 30000); 
+            }, 30000);
+            
+            // Check for pending justifications after loading status
+            await checkPendingJustifications();
 
         } catch (error) {
             showToast("Eroare la obținerea stării liniei.", 'error');
@@ -425,6 +441,76 @@ document.addEventListener("DOMContentLoaded", () => {
             // Refresh status
             await getLineStatus();
             showToast(newState ? 'Live Scan activat' : 'Live Scan dezactivat', 'success');
+        } catch (error) {
+            // Error already shown
+        } finally {
+            showLoading(false);
+        }
+    }
+    
+    // --- OEE Justification Functions ---
+    
+    async function checkPendingJustifications() {
+        if (!currentLineId) return;
+        
+        try {
+            const pending = await apiCall(`/api/operator/pending-justifications?lineId=${currentLineId}`);
+            
+            if (pending && pending.length > 0) {
+                // Show modal for the first pending justification
+                showJustificationModal(pending[0]);
+            }
+        } catch (error) {
+            console.error("Error checking pending justifications:", error);
+            // Don't show toast - this is a background check
+        }
+    }
+    
+    function showJustificationModal(log) {
+        pendingJustificationLog = log;
+        
+        // Populate modal with log details
+        const timestamp = new Date(log.timestamp);
+        document.getElementById('justif-timestamp').textContent = timestamp.toLocaleString('ro-RO');
+        document.getElementById('justif-interval').textContent = log.hourInterval;
+        document.getElementById('justif-actual').textContent = log.actualParts;
+        document.getElementById('justif-target').textContent = log.targetParts;
+        document.getElementById('justif-oee').textContent = log.oee.toFixed(1);
+        
+        oeeJustificationReason.value = '';
+        oeeJustificationModal.classList.remove('hidden');
+    }
+    
+    function closeJustificationModal() {
+        oeeJustificationModal.classList.add('hidden');
+        pendingJustificationLog = null;
+        oeeJustificationReason.value = '';
+    }
+    
+    async function submitJustification() {
+        if (!pendingJustificationLog) return;
+        
+        const reason = oeeJustificationReason.value.trim();
+        if (!reason) {
+            showToast('Vă rugăm introduceți un motiv pentru justificare.', 'warn');
+            return;
+        }
+        
+        showLoading(true);
+        try {
+            await apiCall('/api/operator/justify-oee', {
+                method: 'POST',
+                body: JSON.stringify({
+                    productionLogId: pendingJustificationLog.id,
+                    reason: reason
+                })
+            });
+            
+            showToast('Justificare salvată cu succes.', 'success');
+            closeJustificationModal();
+            
+            // Check if there are more pending justifications
+            await checkPendingJustifications();
         } catch (error) {
             // Error already shown
         } finally {

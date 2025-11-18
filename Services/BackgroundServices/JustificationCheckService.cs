@@ -67,16 +67,74 @@ public class JustificationCheckService : BackgroundService
             return;
         }
 
-        var thresholdSetting = await db.SystemSettings
-            .FirstOrDefaultAsync(s => s.Key == SystemSettingKeys.JustificationThresholdPercent, cancellationToken);
+        // Check recent production logs (last 24 hours) that haven't been checked yet
+        var cutoffTime = DateTime.UtcNow.AddHours(-24);
+        var recentLogs = await db.ProductionLogs
+            .Include(l => l.Line)
+            .Where(l => l.Timestamp > cutoffTime)
+            .Where(l => !l.JustificationRequired || string.IsNullOrEmpty(l.JustificationReason))
+            .ToListAsync(cancellationToken);
 
-        var threshold = thresholdSetting != null ? int.Parse(thresholdSetting.Value!) : 85;
+        int markedCount = 0;
+        foreach (var log in recentLogs)
+        {
+            // Skip if already has justification
+            if (!string.IsNullOrEmpty(log.JustificationReason))
+                continue;
+
+            // Check if line has OEE target set
+            if (log.Line?.OeeTarget == null || log.Line.OeeTarget <= 0)
+                continue;
+
+            // Calculate OEE for this log
+            double oee = log.TargetParts > 0 
+                ? ((double)log.ActualParts / log.TargetParts) * 100.0 
+                : 100.0;
+
+            // If OEE is below target
+            if (oee < log.Line.OeeTarget.Value)
+            {
+                // Check if there are sufficient justifications
+                bool hasSufficientJustification = false;
+
+                // Check for declared downtime
+                if (log.DeclaredDowntimeMinutes.HasValue && log.DeclaredDowntimeMinutes.Value > 0)
+                {
+                    hasSufficientJustification = true;
+                }
+
+                // Check for scrap/NRFT with comments (defect allocations)
+                if (!hasSufficientJustification)
+                {
+                    var hasDefectAllocations = await db.Set<MesEnterprise.Models.Production.ProductionLogDefect>()
+                        .AnyAsync(pld => pld.ProductionLogId == log.Id, cancellationToken);
+                    
+                    if (hasDefectAllocations && (log.ScrapParts > 0 || log.NrftParts > 0))
+                    {
+                        hasSufficientJustification = true;
+                    }
+                }
+
+                // If no sufficient justification, mark as requiring justification
+                if (!hasSufficientJustification)
+                {
+                    log.JustificationRequired = true;
+                    markedCount++;
+                }
+            }
+        }
+
+        if (markedCount > 0)
+        {
+            await db.SaveChangesAsync(cancellationToken);
+            _logger.LogInformation($"Marked {markedCount} production logs as requiring justification");
+        }
 
         var logsNeedingJustification = await db.ProductionLogs
             .Where(l => l.JustificationRequired && string.IsNullOrEmpty(l.JustificationReason))
             .Where(l => l.Timestamp > DateTime.UtcNow.AddDays(-7))
-            .ToListAsync(cancellationToken);
+            .CountAsync(cancellationToken);
 
-        _logger.LogInformation($"Found {logsNeedingJustification.Count} logs needing justification");
+        _logger.LogInformation($"Total logs needing justification: {logsNeedingJustification}");
     }
 }

@@ -100,6 +100,8 @@ namespace MesEnterprise.DTOs
     public record ObservatieOperatorRequest(string Text);
 
     public record JustificationRequest(int BreakdownReasonId, string? Comments);
+    
+    public record JustifyOeeRequest(int ProductionLogId, string Reason);
 
     public record StartInterventieTichetRequest(
         int LineId,

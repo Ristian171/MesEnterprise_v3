@@ -516,6 +516,67 @@ namespace MesEnterprise.Endpoints
                 return Results.Ok(combined);
             });
 
+            // POST /api/operator/justify-oee - Submit OEE justification for a production log
+            operatorApi.MapPost("/justify-oee", [Authorize("OperatorOrHigher")] async (
+                [FromBody] JustifyOeeRequest request,
+                MesDbContext db,
+                ClaimsPrincipal user) =>
+            {
+                var username = user.FindFirst(ClaimTypes.Name)?.Value;
+                if (username == null) return Results.Unauthorized();
+
+                var productionLog = await db.ProductionLogs.FindAsync(request.ProductionLogId);
+                if (productionLog == null)
+                {
+                    return Results.NotFound(new { Message = "Log de producție negăsit." });
+                }
+
+                if (!productionLog.JustificationRequired)
+                {
+                    return Results.BadRequest(new { Message = "Acest log nu necesită justificare." });
+                }
+
+                if (string.IsNullOrWhiteSpace(request.Reason))
+                {
+                    return Results.BadRequest(new { Message = "Motivul justificării este obligatoriu." });
+                }
+
+                productionLog.JustificationReason = request.Reason.Trim();
+                productionLog.JustificationRequired = false; // Mark as resolved
+                await db.SaveChangesAsync();
+
+                return Results.Ok(new { Message = "Justificare salvată cu succes." });
+            });
+
+            // GET /api/operator/pending-justifications - Get production logs requiring justification
+            operatorApi.MapGet("/pending-justifications", [Authorize("OperatorOrHigher")] async (
+                [FromQuery] int? lineId,
+                MesDbContext db) =>
+            {
+                if (!lineId.HasValue)
+                {
+                    return Results.BadRequest(new { Message = "LineId este obligatoriu." });
+                }
+
+                var pendingLogs = await db.ProductionLogs
+                    .Where(l => l.LineId == lineId.Value)
+                    .Where(l => l.JustificationRequired && string.IsNullOrEmpty(l.JustificationReason))
+                    .Where(l => l.Timestamp > DateTime.UtcNow.AddDays(-7)) // Last 7 days
+                    .OrderByDescending(l => l.Timestamp)
+                    .Select(l => new
+                    {
+                        l.Id,
+                        l.Timestamp,
+                        l.HourInterval,
+                        l.ActualParts,
+                        l.TargetParts,
+                        Oee = l.TargetParts > 0 ? Math.Round(((double)l.ActualParts / l.TargetParts) * 100.0, 1) : 0.0
+                    })
+                    .ToListAsync();
+
+                return Results.Ok(pendingLogs);
+            });
+
             return app;
         }
     }
