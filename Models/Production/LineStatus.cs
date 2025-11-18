@@ -18,8 +18,6 @@ namespace MesEnterprise.Models.Production
         [MaxLength(100)]
         public string? CurrentOrder { get; set; }
 
-        public int? CurrentShift { get; set; }
-
         public int? CurrentShiftId { get; set; }
 
         public DateTime? LastStatusChange { get; set; }
@@ -29,5 +27,6 @@ namespace MesEnterprise.Models.Production
         // Navigation properties
         public Line Line { get; set; } = null!;
         public Product? Product { get; set; }
+        public Shift? CurrentShift { get; set; }
     }
 }

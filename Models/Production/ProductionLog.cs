@@ -47,5 +47,6 @@ namespace MesEnterprise.Models.Production
         public BreakdownReason? DeclaredDowntimeReason { get; set; }
         public ProductionWorkOrder? ProductionWorkOrder { get; set; }
         public ICollection<ProductionLogDefect> Defects { get; set; } = new List<ProductionLogDefect>();
+        public ICollection<ProductionLogDefect> DefectAllocations { get; set; } = new List<ProductionLogDefect>();
     }
 }

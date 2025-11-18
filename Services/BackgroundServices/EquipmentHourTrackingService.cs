@@ -67,12 +67,12 @@ public class EquipmentHourTrackingService : BackgroundService
             // Get equipment for active lines
             var lineIds = activeLines.Select(ls => ls.LineId).ToList();
             var equipments = await db.Equipments
-                .Where(e => lineIds.Contains(e.LineId))
+                .Where(e => e.LineId.HasValue && lineIds.Contains(e.LineId.Value))
                 .ToListAsync(cancellationToken);
 
             foreach (var equipment in equipments)
             {
-                equipment.OreFunctionare += 1.0m; // Add 1 hour
+                equipment.OperatingHours += 1.0m; // Add 1 hour
             }
 
             await db.SaveChangesAsync(cancellationToken);

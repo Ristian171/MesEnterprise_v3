@@ -43,5 +43,6 @@ namespace MesEnterprise.Models.Planning
         // Navigation properties
         public Product Product { get; set; } = null!;
         public Line Line { get; set; } = null!;
+        public ICollection<Production.ProductionLog> ProductionLogs { get; set; } = new List<Production.ProductionLog>();
     }
 }

@@ -131,7 +131,7 @@ namespace MesEnterprise.Data
 
             modelBuilder.Entity<ProductionLogDefect>()
                 .HasOne(pld => pld.ProductionLog)
-                .WithMany(pl => pl.Defects)
+                .WithMany(pl => pl.DefectAllocations)
                 .HasForeignKey(pld => pld.ProductionLogId)
                 .OnDelete(DeleteBehavior.Cascade);
 

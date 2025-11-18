@@ -60,7 +60,7 @@ public class JustificationCheckService : BackgroundService
         var db = scope.ServiceProvider.GetRequiredService<MesDbContext>();
 
         var requireJustificationSetting = await db.SystemSettings
-            .FirstOrDefaultAsync(s => s.Key == SystemSettingKeys.RequireJustification, cancellationToken);
+            .FirstOrDefaultAsync(s => s.Key == SystemSetting.RequireJustification, cancellationToken);
 
         if (requireJustificationSetting?.Value != "true")
         {
@@ -68,7 +68,7 @@ public class JustificationCheckService : BackgroundService
         }
 
         var thresholdSetting = await db.SystemSettings
-            .FirstOrDefaultAsync(s => s.Key == SystemSettingKeys.JustificationThresholdPercent, cancellationToken);
+            .FirstOrDefaultAsync(s => s.Key == SystemSetting.JustificationThresholdPercent, cancellationToken);
 
         var threshold = thresholdSetting != null ? int.Parse(thresholdSetting.Value!) : 85;
 

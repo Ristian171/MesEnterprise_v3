@@ -127,7 +127,7 @@ namespace MesEnterprise.Services
             double availableMinutes = totalMinutesInInterval - breakMinutes - dummyMinutes;
             if (availableMinutes < 0) availableMinutes = 0;
 
-            return (int)Math.Floor((availableMinutes * 60) / product.CycleTimeSeconds);
+            return (int)Math.Floor((availableMinutes * 60) / (double)(product.CycleTimeSeconds ?? 1));
         }
 
         /// <summary>
@@ -410,9 +410,9 @@ namespace MesEnterprise.Services
         public static async Task CheckAndRestoreLineStatus(MesDbContext db, int equipmentId)
         {
             var equipment = await db.Equipments.FindAsync(equipmentId);
-            if (equipment == null) return;
+            if (equipment == null || !equipment.LineId.HasValue) return;
 
-            var lineId = equipment.LineId;
+            var lineId = equipment.LineId.Value;
 
             var otherActiveTickets = await db.InterventieTichete
                 .Include(t => t.Equipment)
@@ -428,7 +428,7 @@ namespace MesEnterprise.Services
                 if (lineStatus != null && lineStatus.Status == "Breakdown")
                 {
                     lineStatus.Status = "Stopped";
-                    await UpdateSystemDowntime(db, lineId, lineStatus.LastStatusChange, DateTime.UtcNow, false); // MODIFICAT: UtcNow
+                    await UpdateSystemDowntime(db, lineId, lineStatus.LastStatusChange ?? DateTime.UtcNow, DateTime.UtcNow, false); // MODIFICAT: UtcNow
                     lineStatus.LastStatusChange = DateTime.UtcNow; // MODIFICAT: UtcNow
 
                     await db.SaveChangesAsync();

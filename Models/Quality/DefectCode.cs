@@ -21,14 +21,12 @@ namespace MesEnterprise.Models.Quality
         public int DefectCategoryId { get; set; }
 
         [MaxLength(50)]
-        public string? Category { get; set; }
-
-        [MaxLength(50)]
         public string? Severity { get; set; }
 
         public bool IsActive { get; set; } = true;
 
         // Navigation properties
         public DefectCategory DefectCategory { get; set; } = null!;
+        public DefectCategory Category { get; set; } = null!;
     }
 }
