@@ -272,3 +272,8 @@ async function loadExecuteTasks() {
 async function loadHistory() {
     // Implementation for history tab
 }
+
+function exportToExcel() {
+    window.location.href = `${API_BASE}/export/tpm-plans`;
+    alert('Export TPM în curs...');
+}

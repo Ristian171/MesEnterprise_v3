@@ -215,3 +215,17 @@ function closeHistoryModal() {
 function showNotification(message, type = 'info') {
     alert(message);
 }
+
+function exportToExcel() {
+    const params = new URLSearchParams();
+    
+    // Add date range if available
+    const startDate = prompt('Data start (YYYY-MM-DD) sau Enter pentru toate:');
+    const endDate = prompt('Data sfârșit (YYYY-MM-DD) sau Enter pentru toate:');
+    
+    if (startDate) params.append('startDate', startDate);
+    if (endDate) params.append('endDate', endDate);
+    
+    window.location.href = `${API_BASE}/export/spare-parts-usage?${params.toString()}`;
+    showNotification('Export în curs...', 'info');
+}

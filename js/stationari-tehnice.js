@@ -282,3 +282,23 @@ function showNotification(message, type = 'info') {
     // Simple notification
     alert(message);
 }
+
+function exportToExcel() {
+    // Build query parameters from filters
+    const params = new URLSearchParams();
+    
+    const startDate = document.getElementById('filterStartDate')?.value;
+    const endDate = document.getElementById('filterEndDate')?.value;
+    const lineId = document.getElementById('filterLinie')?.value;
+    const status = document.getElementById('filterStatus')?.value;
+    
+    if (startDate) params.append('startDate', startDate);
+    if (endDate) params.append('endDate', endDate);
+    if (lineId) params.append('lineId', lineId);
+    if (status) params.append('status', status);
+    
+    // Open export endpoint in new window to download file
+    window.location.href = `${API_BASE}/export/stationari-tehnice?${params.toString()}`;
+    
+    showNotification('Export în curs...', 'info');
+}
