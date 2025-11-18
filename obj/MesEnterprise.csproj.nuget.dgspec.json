@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Tehnic\\Documents\\GitHub\\MesEnterprise2-v4\\MesEnterprise.csproj": {}
+    "/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/MesEnterprise.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Tehnic\\Documents\\GitHub\\MesEnterprise2-v4\\MesEnterprise.csproj": {
+    "/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/MesEnterprise.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Tehnic\\Documents\\GitHub\\MesEnterprise2-v4\\MesEnterprise.csproj",
+        "projectUniqueName": "/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/MesEnterprise.csproj",
         "projectName": "MesEnterprise",
-        "projectPath": "C:\\Users\\Tehnic\\Documents\\GitHub\\MesEnterprise2-v4\\MesEnterprise.csproj",
-        "packagesPath": "C:\\Users\\Tehnic\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Tehnic\\Documents\\GitHub\\MesEnterprise2-v4\\obj\\",
+        "projectPath": "/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/MesEnterprise.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Tehnic\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/runner/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -37,7 +37,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -117,7 +118,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.409/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
