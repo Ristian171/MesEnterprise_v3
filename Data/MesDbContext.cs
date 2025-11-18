@@ -125,13 +125,13 @@ namespace MesEnterprise.Data
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<DefectCode>()
-                .HasOne(d => d.Category)
+                .HasOne(d => d.DefectCategory)
                 .WithMany(c => c.DefectCodes)
                 .HasForeignKey(d => d.DefectCategoryId);
 
             modelBuilder.Entity<ProductionLogDefect>()
                 .HasOne(pld => pld.ProductionLog)
-                .WithMany(pl => pl.DefectAllocations)
+                .WithMany(pl => pl.Defects)
                 .HasForeignKey(pld => pld.ProductionLogId)
                 .OnDelete(DeleteBehavior.Cascade);
 
