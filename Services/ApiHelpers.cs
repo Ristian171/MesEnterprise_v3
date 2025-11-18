@@ -127,7 +127,9 @@ namespace MesEnterprise.Services
             double availableMinutes = totalMinutesInInterval - breakMinutes - dummyMinutes;
             if (availableMinutes < 0) availableMinutes = 0;
 
-            return (int)Math.Floor((availableMinutes * 60) / product.CycleTimeSeconds);
+            return product.CycleTimeSeconds.HasValue 
+                ? (int)Math.Floor((availableMinutes * 60) / product.CycleTimeSeconds.Value)
+                : 0;
         }
 
         /// <summary>
