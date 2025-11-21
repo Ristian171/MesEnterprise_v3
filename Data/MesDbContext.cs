@@ -125,7 +125,7 @@ namespace MesEnterprise.Data
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<DefectCode>()
-                .HasOne(d => d.Category)
+                .HasOne(d => d.DefectCategory)
                 .WithMany(c => c.DefectCodes)
                 .HasForeignKey(d => d.DefectCategoryId);
 

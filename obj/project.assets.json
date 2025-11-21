@@ -5575,19 +5575,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Tehnic\\.nuget\\packages\\": {}
+    "/home/runner/work/MesEnterprise_v3/.codeql-scratch/dbs/csharp/working/packages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Tehnic\\Documents\\GitHub\\MesEnterprise2-v4\\MesEnterprise.csproj",
+      "projectUniqueName": "/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/MesEnterprise.csproj",
       "projectName": "MesEnterprise",
-      "projectPath": "C:\\Users\\Tehnic\\Documents\\GitHub\\MesEnterprise2-v4\\MesEnterprise.csproj",
-      "packagesPath": "C:\\Users\\Tehnic\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Tehnic\\Documents\\GitHub\\MesEnterprise2-v4\\obj\\",
+      "projectPath": "/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/MesEnterprise.csproj",
+      "packagesPath": "/home/runner/work/MesEnterprise_v3/.codeql-scratch/dbs/csharp/working/packages",
+      "outputPath": "/home/runner/work/MesEnterprise_v3/MesEnterprise_v3/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Tehnic\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/runner/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -5610,7 +5610,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net8.0": {
@@ -5682,6 +5683,20 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.linux-x64",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.22, 8.0.22]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -5690,7 +5705,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.409/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

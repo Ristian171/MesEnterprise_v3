@@ -633,12 +633,12 @@ namespace MesEnterprise.Endpoints
                             var existingProduct = await db.Products.FirstOrDefaultAsync(p => p.Name == productName);
                             if (existingProduct != null)
                             {
-                                existingProduct.CycleTimeSeconds = cycleTime;
+                                existingProduct.CycleTimeSeconds = (decimal)cycleTime;
                                 updated++;
                             }
                             else
                             {
-                                db.Products.Add(new Product { Name = productName, CycleTimeSeconds = cycleTime });
+                                db.Products.Add(new Product { Name = productName, CycleTimeSeconds = (decimal)cycleTime });
                                 added++;
                             }
                         }

@@ -15,6 +15,11 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Kestrel URLs
+// Priority: ASPNETCORE_URLS environment variable > command-line args > default (http://localhost:5000)
+var urls = Environment.GetEnvironmentVariable("ASPNETCORE_URLS") ?? "http://localhost:5000";
+builder.WebHost.UseUrls(urls);
+
 // --- Start of Recommended Serilog Configuration ---
 // Configure Serilog directly on the host builder. This ensures it has
 // access to the full application configuration (appsettings, env vars, etc.).
@@ -207,6 +212,18 @@ try
     // Map Enterprise endpoints
     app.MapPlanningEndpoints();
     app.MapAdminEndpoints();
+
+    // Log server URLs
+    var serverAddresses = urls.Split(';', StringSplitOptions.RemoveEmptyEntries);
+    Log.Information("==========================================================");
+    Log.Information("MES Enterprise Server Starting");
+    Log.Information("==========================================================");
+    foreach (var address in serverAddresses)
+    {
+        Log.Information("Server listening on: {Address}", address.Trim());
+    }
+    Log.Information("Environment: {Environment}", app.Environment.EnvironmentName);
+    Log.Information("==========================================================");
 
     app.Run();
 }

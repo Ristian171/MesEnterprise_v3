@@ -1,0 +1,301 @@
+/*
+ * ===================================================================================
+ * MES ENTERPRISE - THEME SYSTEM
+ * Dark/Light theme support for industrial use
+ * ===================================================================================
+ */
+
+/* --- LIGHT THEME (Default) --- */
+:root,
+:root[data-theme="light"] {
+    /* Paletă de culori - Light */
+    --color-primary: #007bff;
+    --color-primary-dark: #0056b3;
+    --color-primary-light: #4da3ff;
+    --color-secondary: #6c757d;
+    --color-secondary-dark: #495057;
+    --color-success: #28a745;
+    --color-success-dark: #1e7e34;
+    --color-danger: #dc3545;
+    --color-danger-dark: #bd2130;
+    --color-warn: #ffc107;
+    --color-warn-dark: #d39e00;
+    --color-info: #17a2b8;
+    --color-info-dark: #117a8b;
+    
+    --color-background: #f4f7f6;
+    --color-surface: #ffffff;
+    --color-surface-elevated: #fafafa;
+    --color-border: #dee2e6;
+    --color-border-light: #e9ecef;
+    
+    --color-text: #212529;
+    --color-text-secondary: #495057;
+    --color-text-muted: #6c757d;
+    --color-text-on-primary: #ffffff;
+    --color-text-on-danger: #ffffff;
+    --color-text-on-success: #ffffff;
+
+    /* Shadows */
+    --shadow-small: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 4px 10px rgba(0, 0, 0, 0.1);
+    --shadow-large: 0 8px 20px rgba(0, 0, 0, 0.15);
+
+    /* Industrial specific - Light */
+    --color-running: #28a745;
+    --color-stopped: #dc3545;
+    --color-breakdown: #ffc107;
+    --color-changeover: #17a2b8;
+}
+
+/* --- DARK THEME (Industrial/Factory Mode) --- */
+:root[data-theme="dark"] {
+    /* Paletă de culori - Dark (industrial) */
+    --color-primary: #4da3ff;
+    --color-primary-dark: #007bff;
+    --color-primary-light: #80b8ff;
+    --color-secondary: #adb5bd;
+    --color-secondary-dark: #6c757d;
+    --color-success: #51cf66;
+    --color-success-dark: #37b24d;
+    --color-danger: #ff6b6b;
+    --color-danger-dark: #fa5252;
+    --color-warn: #ffd43b;
+    --color-warn-dark: #fcc419;
+    --color-info: #4dabf7;
+    --color-info-dark: #339af0;
+    
+    --color-background: #1a1d23;
+    --color-surface: #25292f;
+    --color-surface-elevated: #2d3139;
+    --color-border: #3d4349;
+    --color-border-light: #4a5058;
+    
+    --color-text: #e9ecef;
+    --color-text-secondary: #ced4da;
+    --color-text-muted: #adb5bd;
+    --color-text-on-primary: #ffffff;
+    --color-text-on-danger: #ffffff;
+    --color-text-on-success: #ffffff;
+
+    /* Shadows - more pronounced in dark mode */
+    --shadow-small: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-medium: 0 4px 10px rgba(0, 0, 0, 0.4);
+    --shadow-large: 0 8px 20px rgba(0, 0, 0, 0.5);
+
+    /* Industrial specific - Dark (high visibility) */
+    --color-running: #51cf66;
+    --color-stopped: #ff6b6b;
+    --color-breakdown: #ffd43b;
+    --color-changeover: #4dabf7;
+}
+
+/* --- THEME TOGGLE BUTTON --- */
+.theme-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.theme-toggle input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-toggle-slider {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 26px;
+    background-color: var(--color-secondary);
+    border-radius: 26px;
+    transition: background-color 0.3s ease;
+}
+
+.theme-toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    top: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle input:checked + .theme-toggle-slider {
+    background-color: var(--color-primary);
+}
+
+.theme-toggle input:checked + .theme-toggle-slider::before {
+    transform: translateX(26px);
+}
+
+.theme-toggle-label {
+    font-size: 14px;
+    color: var(--color-text);
+    font-weight: 500;
+}
+
+.theme-icon {
+    font-size: 18px;
+    color: var(--color-text-muted);
+}
+
+/* --- RESPONSIVE ADJUSTMENTS FOR MOBILE --- */
+@media (max-width: 768px) {
+    :root {
+        --spacing-xs: 4px;
+        --spacing-s: 6px;
+        --spacing-m: 12px;
+        --spacing-l: 18px;
+        --spacing-xl: 24px;
+        
+        --font-size-base: 14px;
+        --font-size-h1: 2rem;
+        --font-size-h2: 1.75rem;
+        --font-size-h3: 1.5rem;
+        --font-size-h4: 1.25rem;
+    }
+}
+
+/* --- HIGH CONTRAST MODE (for bright factory lighting) --- */
+@media (prefers-contrast: high), (prefers-contrast: more) {
+    :root[data-theme="light"] {
+        --color-text: #000000;
+        --color-background: #ffffff;
+        --color-border: #000000;
+    }
+    
+    :root[data-theme="dark"] {
+        --color-text: #ffffff;
+        --color-background: #000000;
+        --color-border: #ffffff;
+    }
+}
+
+/* --- REDUCED MOTION (for accessibility) --- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* --- DARK THEME SPECIFIC OVERRIDES --- */
+:root[data-theme="dark"] {
+    /* Make form inputs stand out */
+    input,
+    select,
+    textarea {
+        background-color: var(--color-surface-elevated);
+        border-color: var(--color-border);
+        color: var(--color-text);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+        color: var(--color-text-muted);
+    }
+
+    /* Adjust button styles for dark mode */
+    .btn {
+        border: 1px solid var(--color-border);
+    }
+
+    /* Make tables more readable */
+    table {
+        border-color: var(--color-border);
+    }
+
+    th {
+        background-color: var(--color-surface-elevated);
+        color: var(--color-text);
+    }
+
+    tr:nth-child(even) {
+        background-color: var(--color-surface);
+    }
+
+    tr:nth-child(odd) {
+        background-color: var(--color-background);
+    }
+}
+
+/* --- INDUSTRIAL UI ENHANCEMENTS --- */
+/* Large touch-friendly buttons for operators */
+.btn-touch {
+    min-height: 60px;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 12px 24px;
+}
+
+/* Status indicators with high visibility */
+.status-indicator {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.status-indicator.running {
+    background-color: var(--color-running);
+    box-shadow: 0 0 10px var(--color-running);
+}
+
+.status-indicator.stopped {
+    background-color: var(--color-stopped);
+    box-shadow: 0 0 10px var(--color-stopped);
+}
+
+.status-indicator.breakdown {
+    background-color: var(--color-breakdown);
+    box-shadow: 0 0 10px var(--color-breakdown);
+    animation: pulse 2s infinite;
+}
+
+.status-indicator.changeover {
+    background-color: var(--color-changeover);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* High contrast text for critical information */
+.critical-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.warning-value {
+    color: var(--color-warn);
+    font-weight: 700;
+}
+
+.error-value {
+    color: var(--color-danger);
+    font-weight: 700;
+}
+
+.success-value {
+    color: var(--color-success);
+    font-weight: 700;
+}
